@@ -1,9 +1,9 @@
 import { useState } from 'react';
 
 const serviceMap = {
-  '7000-service': { salon: 4000, barber: 2000, assistant: 1000 },
-  '5000-service': { salon: 3000, barber: 2000, assistant: 0 },
-  'child-service': { salon: 2000, barber: 1000, assistant: 0 },
+  '7000-service': { service_amount:7000, salon_amount: 4000, barber_amount: 2000, assistant_amount: 1000 },
+  '5000-service': { service_amount:5000, salon_amount: 3000, barber_amount: 2000, assistant_amount: 0 },
+  'child-service': { service_amount:3000, salon_amount: 2000, barber_amount: 1000, assistant_amount: 0 },
 };
 
 export default function ServiceForm({ onSubmit, onClose }) {
@@ -29,16 +29,17 @@ export default function ServiceForm({ onSubmit, onClose }) {
 
     const payload = {
       name: service,
+      service_amount: calculation.service_amount,
       barber,
-      assistant: calculation.assistant > 0 ? assistant : null,
-      barber_amount: calculation.barber,
-      assistant_amount: calculation.assistant > 0 ? calculation.assistant : null,
-      salon_amount: calculation.salon,
+      barber_amount: calculation.barber_amount,
+      assistant: calculation.assistant_amount > 0 ? assistant : null,
+      assistant_amount: calculation.assistant_amount > 0 ? calculation.assistant_amount : null,
+      salon_amount: calculation.salon_amount,
     };
 
     try {
-      await onSubmit(payload); // delegate actual submission to parent
-      onClose(); // close modal only if successful
+      await onSubmit(payload);
+      onClose();
     } catch (err) {
       console.error('Submission error:', err);
     }
