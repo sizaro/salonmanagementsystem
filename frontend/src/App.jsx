@@ -1,6 +1,7 @@
 import { Routes, Route } from 'react-router-dom';
 import Sidebar from './components/Sidebar';
 import Dashboard from './pages/Dashboard';
+import IncomeDailyReport from './pages/IncomeDailyReport';
 
 function App() {
   return (
@@ -10,7 +11,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Dashboard />} />
           {/* Placeholder routes */}
-          <Route path="/reports/daily" element={<div>Daily Report</div>} />
+          <Route path="/pages/IncomeDailyReport" element={<IncomeDailyReport />} />
           <Route path="/reports/weekly" element={<div>Weekly Report</div>} />
           <Route path="/reports/monthly" element={<div>Monthly Report</div>} />
           <Route path="/workers" element={<div>Worker Performance</div>} />
