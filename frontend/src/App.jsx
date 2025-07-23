@@ -6,7 +6,7 @@ function App() {
   return (
     <div className="flex">
       <Sidebar />
-      <main className="flex-1 p-6 ml-64">
+      <main className="flex-1 p-6 pt-18 md:pt-6 md:ml-64">
         <Routes>
           <Route path="/" element={<Dashboard />} />
           {/* Placeholder routes */}

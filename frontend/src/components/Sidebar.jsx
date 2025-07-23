@@ -1,11 +1,13 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
 export default function Sidebar() {
+  const [menuOpen, setMenuOpen] = useState(false);
   const [incomeOpen, setIncomeOpen] = useState(false);
   const [expensesOpen, setExpensesOpen] = useState(false);
   const [workersOpen, setWorkersOpen] = useState(false);
 
+  const menuRef = useRef();
   const location = useLocation();
 
   const isActive = (path) => location.pathname === path;
@@ -15,72 +17,140 @@ export default function Sidebar() {
       isActive(path) ? 'bg-gray-700 font-semibold' : 'hover:bg-gray-700'
     }`;
 
+  // Close mobile menu on outside click
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (menuRef.current && !menuRef.current.contains(e.target)) {
+        setMenuOpen(false);
+      }
+    };
+    if (menuOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [menuOpen]);
+
   return (
-    <nav className="w-64 h-screen bg-gray-900 text-white fixed overflow-y-auto">
-      <div className="p-6 font-bold text-xl">Salon Dashboard</div>
-      <ul className="space-y-1 px-2 text-sm">
+    <>
+      {/* Top Mobile Header */}
+      <div className="md:hidden bg-gray-900 p-4 flex justify-between  items-center text-white fixed top-0 left-0 right-0 z-50">
+        <span className="font-bold text-lg">Salon Management</span>
+        <button onClick={() => setMenuOpen(true)} className="text-2xl focus:outline-none">☰</button>
+      </div>
 
-        {/* Dashboard */}
-        <li>
-          <Link to="/" className={linkClass('/')}>
-            Dashboard
-          </Link>
-        </li>
+      {/* Desktop Sidebar */}
+      <aside className="hidden md:flex w-64 h-screen bg-gray-900 text-white fixed top-0 left-0 flex-col shadow-lg pt-16">
+        <div className="px-6 font-bold text-xl mb-4">Salon Management</div>
+        <ul className="space-y-1 px-2 text-sm">
+          <li><Link to="/" className={linkClass('/')}>Dashboard</Link></li>
 
-        {/* Income Reports */}
-        <li>
-          <div
-            className="px-4 py-2 rounded cursor-pointer hover:bg-gray-700 transition-colors flex justify-between"
-            onClick={() => setIncomeOpen(!incomeOpen)}
-          >
-            <span>Income Reports</span>
-            <span>{incomeOpen ? '▾' : '▸'}</span>
-          </div>
-          {incomeOpen && (
-            <ul className="ml-4 space-y-1 mt-1">
-              <li><Link to="/reports/daily" className={linkClass('/reports/daily')}>Daily</Link></li>
-              <li><Link to="/reports/weekly" className={linkClass('/reports/weekly')}>Weekly</Link></li>
-              <li><Link to="/reports/monthly" className={linkClass('/reports/monthly')}>Monthly</Link></li>
-            </ul>
-          )}
-        </li>
+          {/* Income */}
+          <li>
+            <div onClick={() => setIncomeOpen(!incomeOpen)} className="px-4 py-2 rounded cursor-pointer hover:bg-gray-700 flex justify-between">
+              <span>Income Reports</span><span>{incomeOpen ? '▾' : '▸'}</span>
+            </div>
+            {incomeOpen && (
+              <ul className="ml-4 space-y-1 mt-1">
+                <li><Link to="/reports/daily" className={linkClass('/reports/daily')}>Daily</Link></li>
+                <li><Link to="/reports/weekly" className={linkClass('/reports/weekly')}>Weekly</Link></li>
+                <li><Link to="/reports/monthly" className={linkClass('/reports/monthly')}>Monthly</Link></li>
+              </ul>
+            )}
+          </li>
 
-        {/* Expenses */}
-        <li>
-          <div
-            className="px-4 py-2 rounded cursor-pointer hover:bg-gray-700 transition-colors flex justify-between"
-            onClick={() => setExpensesOpen(!expensesOpen)}
-          >
-            <span>Expenses</span>
-            <span>{expensesOpen ? '▾' : '▸'}</span>
-          </div>
-          {expensesOpen && (
-            <ul className="ml-4 space-y-1 mt-1">
-              <li><Link to="/expenses/daily" className={linkClass('/expenses/daily')}>Daily</Link></li>
-              <li><Link to="/expenses/weekly" className={linkClass('/expenses/weekly')}>Weekly</Link></li>
-              <li><Link to="/expenses/monthly" className={linkClass('/expenses/monthly')}>Monthly</Link></li>
-            </ul>
-          )}
-        </li>
+          {/* Expenses */}
+          <li>
+            <div onClick={() => setExpensesOpen(!expensesOpen)} className="px-4 py-2 rounded cursor-pointer hover:bg-gray-700 flex justify-between">
+              <span>Expenses</span><span>{expensesOpen ? '▾' : '▸'}</span>
+            </div>
+            {expensesOpen && (
+              <ul className="ml-4 space-y-1 mt-1">
+                <li><Link to="/expenses/daily" className={linkClass('/expenses/daily')}>Daily</Link></li>
+                <li><Link to="/expenses/weekly" className={linkClass('/expenses/weekly')}>Weekly</Link></li>
+                <li><Link to="/expenses/monthly" className={linkClass('/expenses/monthly')}>Monthly</Link></li>
+              </ul>
+            )}
+          </li>
 
-        {/* Worker Performance */}
-        <li>
-          <div
-            className="px-4 py-2 rounded cursor-pointer hover:bg-gray-700 transition-colors flex justify-between"
-            onClick={() => setWorkersOpen(!workersOpen)}
-          >
-            <span>Worker Performance</span>
-            <span>{workersOpen ? '▾' : '▸'}</span>
-          </div>
-          {workersOpen && (
-            <ul className="ml-4 space-y-1 mt-1">
-              <li><Link to="/workers/daily" className={linkClass('/workers/daily')}>Daily</Link></li>
-              <li><Link to="/workers/weekly" className={linkClass('/workers/weekly')}>Weekly</Link></li>
-              <li><Link to="/workers/monthly" className={linkClass('/workers/monthly')}>Monthly</Link></li>
-            </ul>
-          )}
-        </li>
-      </ul>
-    </nav>
+          {/* Workers */}
+          <li>
+            <div onClick={() => setWorkersOpen(!workersOpen)} className="px-4 py-2 rounded cursor-pointer hover:bg-gray-700 flex justify-between">
+              <span>Worker Performance</span><span>{workersOpen ? '▾' : '▸'}</span>
+            </div>
+            {workersOpen && (
+              <ul className="ml-4 space-y-1 mt-1">
+                <li><Link to="/workers/daily" className={linkClass('/workers/daily')}>Daily</Link></li>
+                <li><Link to="/workers/weekly" className={linkClass('/workers/weekly')}>Weekly</Link></li>
+                <li><Link to="/workers/monthly" className={linkClass('/workers/monthly')}>Monthly</Link></li>
+              </ul>
+            )}
+          </li>
+        </ul>
+      </aside>
+
+      {/* Mobile Slide-Out Menu */}
+      <div
+        ref={menuRef}
+        className={`fixed top-0 left-0 h-full w-full bg-gray-900 text-white z-50 transform transition-transform duration-300 pt-16 px-4 sm:hidden ${
+          menuOpen ? 'translate-x-0' : '-translate-x-full'
+        }`}
+      >
+        {/* Close button */}
+        <button
+          onClick={() => setMenuOpen(false)}
+          className="absolute top-4 right-4 text-xl focus:outline-none"
+        >
+          ✕
+        </button>
+
+        <ul className="space-y-1 mt-6 text-sm">
+          <li><Link to="/" onClick={() => setMenuOpen(false)} className={linkClass('/')}>Dashboard</Link></li>
+
+          {/* Income */}
+          <li>
+            <div onClick={() => setIncomeOpen(!incomeOpen)} className="px-4 py-2 rounded cursor-pointer hover:bg-gray-700 flex justify-between">
+              <span>Income Reports</span><span>{incomeOpen ? '▾' : '▸'}</span>
+            </div>
+            {incomeOpen && (
+              <ul className="ml-4 space-y-1 mt-1">
+                <li><Link to="/reports/daily" onClick={() => setMenuOpen(false)} className={linkClass('/reports/daily')}>Daily</Link></li>
+                <li><Link to="/reports/weekly" onClick={() => setMenuOpen(false)} className={linkClass('/reports/weekly')}>Weekly</Link></li>
+                <li><Link to="/reports/monthly" onClick={() => setMenuOpen(false)} className={linkClass('/reports/monthly')}>Monthly</Link></li>
+              </ul>
+            )}
+          </li>
+
+          {/* Expenses */}
+          <li>
+            <div onClick={() => setExpensesOpen(!expensesOpen)} className="px-4 py-2 rounded cursor-pointer hover:bg-gray-700 flex justify-between">
+              <span>Expenses</span><span>{expensesOpen ? '▾' : '▸'}</span>
+            </div>
+            {expensesOpen && (
+              <ul className="ml-4 space-y-1 mt-1">
+                <li><Link to="/expenses/daily" onClick={() => setMenuOpen(false)} className={linkClass('/expenses/daily')}>Daily</Link></li>
+                <li><Link to="/expenses/weekly" onClick={() => setMenuOpen(false)} className={linkClass('/expenses/weekly')}>Weekly</Link></li>
+                <li><Link to="/expenses/monthly" onClick={() => setMenuOpen(false)} className={linkClass('/expenses/monthly')}>Monthly</Link></li>
+              </ul>
+            )}
+          </li>
+
+          {/* Workers */}
+          <li>
+            <div onClick={() => setWorkersOpen(!workersOpen)} className="px-4 py-2 rounded cursor-pointer hover:bg-gray-700 flex justify-between">
+              <span>Worker Performance</span><span>{workersOpen ? '▾' : '▸'}</span>
+            </div>
+            {workersOpen && (
+              <ul className="ml-4 space-y-1 mt-1">
+                <li><Link to="/workers/daily" onClick={() => setMenuOpen(false)} className={linkClass('/workers/daily')}>Daily</Link></li>
+                <li><Link to="/workers/weekly" onClick={() => setMenuOpen(false)} className={linkClass('/workers/weekly')}>Weekly</Link></li>
+                <li><Link to="/workers/monthly" onClick={() => setMenuOpen(false)} className={linkClass('/workers/monthly')}>Monthly</Link></li>
+              </ul>
+            )}
+          </li>
+        </ul>
+      </div>
+    </>
   );
 }

@@ -1,26 +1,54 @@
 import { useState } from 'react';
 import Modal from '../components/Modal';
 import ServiceForm from '../components/ServiceForm';
+import ExpenseForm from '../components/ExpenseForm';
+import AdvanceForm from '../components/AdvanceForm';
+import Button from '../components/Button';
 import axios from 'axios';
 
 export default function Dashboard() {
-  const [showModal, setShowModal] = useState(false);
+  const [modalType, setModalType] = useState(null); // 'service' | 'expense' | 'advance'
+
+  const closeModal = () => setModalType(null);
 
   const handleService = async (formData) => {
     try {
-      await axios.post('/api/services', formData);
-      setShowModal(false);
+      await axios.post('http://localhost:5500/api/services', formData);
+      closeModal();
     } catch (err) {
       console.error('Failed to submit service', err);
     }
   };
 
+  const handleExpense = async (formData) => {
+    try {
+      await axios.post('http://localhost:5500/api/expenses', formData);
+      closeModal();
+    } catch (err) {
+      console.error('Failed to submit expense', err);
+    }
+  };
+
+  const handleAdvance = async (formData) => {
+    try {
+      await axios.post('http://localhost:5500/api/advances', formData);
+      closeModal();
+    } catch (err) {
+      console.error('Failed to submit advance', err);
+    }
+  };
+
   return (
-    <>
-      <button onClick={() => setShowModal(true)}>Add Service</button>
-      <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
-        <ServiceForm onSubmit={handleService} onClose={() => setShowModal(false)} />
+    <div className="space-y-10">
+      <Button onClick={() => setModalType('service')}>Add Service</Button>
+      <Button onClick={() => setModalType('expense')}>Add Expense</Button>
+      <Button onClick={() => setModalType('advance')}>Add Advance</Button>
+
+      <Modal isOpen={modalType !== null} onClose={closeModal}>
+        {modalType === 'service' && <ServiceForm onSubmit={handleService} onClose={closeModal} />}
+        {modalType === 'expense' && <ExpenseForm onSubmit={handleExpense} onClose={closeModal} />}
+        {modalType === 'advance' && <AdvanceForm onSubmit={handleAdvance} onClose={closeModal} />}
       </Modal>
-    </>
+    </div>
   );
 }
