@@ -10,6 +10,7 @@ export default function ExpenseForm({ onSubmit, onClose }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     onSubmit(form);
+    onClose()
   };
 
   return (

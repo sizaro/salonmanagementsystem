@@ -67,6 +67,7 @@ const IncomeDailyReport = () => {
           <table className="w-full border border-gray-300 text-sm">
             <thead className="bg-blue-700 text-white">
               <tr>
+                <th className="p-2 text-left">No.</th>
                 <th className="p-2 text-left">Service</th>
                 <th className="p-2 text-left">Qty</th>
                 <th className="p-2 text-left">Total (UGX)</th>
@@ -75,6 +76,7 @@ const IncomeDailyReport = () => {
             <tbody>
               {report.services.map((service, index) => (
                 <tr key={index} className="border-b">
+                  <td className="p-2">{index + 1}</td>
                   <td className="p-2">{service.name}</td>
                   <td className="p-2">{service.qty}</td>
                   <td className="p-2">{service.total}</td>
