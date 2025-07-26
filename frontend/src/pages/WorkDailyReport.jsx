@@ -11,21 +11,21 @@ const WorkDailyReport = () => {
 
   const workers = [
     {
-      name: 'Sarah',
+      name: 'Tagoole Nathan',
       services: [
         { category: 'Bridal Makeup', qty: 2, amount: 40000 },
         { category: 'Hair Styling', qty: 2, amount: 40000 },
       ],
     },
     {
-      name: 'Anita',
+      name: 'Nyiro Robert',
       services: [
         { category: 'Manicure', qty: 2, amount: 40000 },
         { category: 'Pedicure', qty: 1, amount: 20000 },
       ],
     },
     {
-      name: 'Kevin',
+      name: 'Nambi Aisha',
       services: [
         { category: 'Hair Styling', qty: 3, amount: 60000 },
         { category: 'Pedicure', qty: 1, amount: 20000 },
