@@ -1,13 +1,15 @@
 import React from 'react';
 
-// Helper function to calculate daily salary (e.g., 40% commission)
 const calculateSalary = (serviceBreakdown) => {
   const total = serviceBreakdown.reduce((sum, item) => sum + item.amount, 0);
   return total * 0.4;
 };
 
 const WorkDailyReport = () => {
-  const reportDate = 'Wednesday, July 10, 2025';
+  const today = new Date();
+   const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+   const reportDate = today.toLocaleDateString('en-US', options);
+
 
   const workers = [
     {
