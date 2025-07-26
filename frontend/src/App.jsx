@@ -3,7 +3,7 @@ import Sidebar from './components/Sidebar';
 import Dashboard from './pages/Dashboard';
 import IncomeDailyReport from './pages/IncomeDailyReport';
 import ExpensesDailyReport from './pages/ExpensesDailyReport';
-
+import WorkDailyReport from './pages/WorkDailyReport';
 function App() {
   return (
     <div className="flex">
@@ -14,7 +14,7 @@ function App() {
           {/* Placeholder routes */}
           <Route path="/pages/IncomeDailyReport" element={<IncomeDailyReport />} />
           <Route path="/pages/ExpensesDailyReport" element={<ExpensesDailyReport/>} />
-          <Route path="/reports/monthly" element={<div>Monthly Report</div>} />
+          <Route path="/pages/WorkDailyReport" element={<WorkDailyReport/>} />
           <Route path="/workers" element={<div>Worker Performance</div>} />
         </Routes>
       </main>
