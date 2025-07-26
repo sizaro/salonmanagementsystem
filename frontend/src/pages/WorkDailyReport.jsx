@@ -6,7 +6,7 @@ const calculateSalary = (serviceBreakdown) => {
   return total * 0.4;
 };
 
-const WorkerPerformanceReport = () => {
+const WorkDailyReport = () => {
   const reportDate = 'Wednesday, July 10, 2025';
 
   const workers = [
@@ -83,4 +83,5 @@ const WorkerPerformanceReport = () => {
   );
 };
 
-export default WorkerPerformanceReport;
+export default WorkDailyReport;
+

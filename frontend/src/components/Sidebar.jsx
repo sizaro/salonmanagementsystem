@@ -81,7 +81,7 @@ export default function Sidebar() {
             </div>
             {workersOpen && (
               <ul className="ml-4 space-y-1 mt-1">
-                <li><Link to="/workers/daily" className={linkClass('/workers/daily')}>Daily</Link></li>
+                <li><Link to="/pages/WorkDailyReport" className={linkClass('/pages/WorkDailyReport')}>Daily</Link></li>
                 <li><Link to="/workers/weekly" className={linkClass('/workers/weekly')}>Weekly</Link></li>
                 <li><Link to="/workers/monthly" className={linkClass('/workers/monthly')}>Monthly</Link></li>
               </ul>
@@ -143,7 +143,7 @@ export default function Sidebar() {
             </div>
             {workersOpen && (
               <ul className="ml-4 space-y-1 mt-1">
-                <li><Link to="/workers/daily" onClick={() => setMenuOpen(false)} className={linkClass('/workers/daily')}>Daily</Link></li>
+                <li><Link to="/pages/WorkDailyReport" onClick={() => setMenuOpen(false)} className={linkClass('/pages/WorkDailyReport')}>Daily</Link></li>
                 <li><Link to="/workers/weekly" onClick={() => setMenuOpen(false)} className={linkClass('/workers/weekly')}>Weekly</Link></li>
                 <li><Link to="/workers/monthly" onClick={() => setMenuOpen(false)} className={linkClass('/workers/monthly')}>Monthly</Link></li>
               </ul>
