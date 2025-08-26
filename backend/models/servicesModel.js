@@ -3,32 +3,69 @@ import db from '../models/database.js'
 export const saveService = async ({
   name,
   service_amount,
+  salon_amount,
   barber,
   barber_amount,
-  assistant,
-  assistant_amount,
-  salon_amount,
+  barber_assistant,
+  barber_assistant_amount,
+  scrubber_assistant,
+  scrubber_assistant_amount,
+  black_shampoo_assistant,
+  black_shampoo_assistant_amount,
+  black_shampoo_amount,
+  super_black_assistant,
+  super_black_assistant_amount,
+  super_black_amount,
+  black_mask_assistant,
+  black_mask_assistant_amount,
+  black_mask_amount
 }) => {
   const query = `
     INSERT INTO services (
-      service_name,
-      amount,
+      name,
+      service_amount,
+      salon_amount,
       barber,
       barber_amount,
       barber_assistant,
       barber_assistant_amount,
-      salon_amount
-    ) VALUES ($1, $2, $3, $4, $5, $6, $7)
+      scrubber_assistant,
+      scrubber_assistant_amount,
+      black_shampoo_assistant,
+      black_shampoo_assistant_amount,
+      black_shampoo_amount,
+      super_black_assistant,
+      super_black_assistant_amount,
+      super_black_amount,
+      black_mask_assistant,
+      black_mask_assistant_amount,
+      black_mask_amount
+    ) VALUES (
+      $1, $2, $3, $4, $5, $6, $7,
+      $8, $9, $10, $11, $12, $13,
+      $14, $15, $16, $17, $18
+    )
   `;
 
   const values = [
     name,
     service_amount,
+    salon_amount,
     barber,
     barber_amount,
-    assistant,
-    assistant_amount,
-    salon_amount,
+    barber_assistant,
+    barber_assistant_amount,
+    scrubber_assistant,
+    scrubber_assistant_amount,
+    black_shampoo_assistant,
+    black_shampoo_assistant_amount,
+    black_shampoo_amount,
+    super_black_assistant,
+    super_black_assistant_amount,
+    super_black_amount,
+    black_mask_assistant,
+    black_mask_assistant_amount,
+    black_mask_amount
   ];
 
   await db.query(query, values);

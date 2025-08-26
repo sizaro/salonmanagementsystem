@@ -6,7 +6,7 @@ export const saveExpense = async ({
 }) => {
   const query = `
     INSERT INTO expenses (
-      expense_name,
+      name,
       amount
     ) VALUES ($1, $2)
   `;

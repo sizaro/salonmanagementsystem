@@ -1,16 +1,99 @@
 import { useState } from 'react';
 
 const serviceMap = {
-  '7000-service': { service_amount:7000, salon_amount: 4000, barber_amount: 2000, assistant_amount: 1000 },
-  '5000-service': { service_amount:5000, salon_amount: 3000, barber_amount: 2000, assistant_amount: 0 },
-  'child-service': { service_amount:3000, salon_amount: 2000, barber_amount: 1000, assistant_amount: 0 },
+  '7000-service': { 
+    serviceAmount: 7000, 
+    salonAmount: 4000, 
+    barberAmount: 2000, 
+    barberAssistantAmount: 1000 
+  },
+  '5000-service': { 
+    serviceAmount: 5000, 
+    salonAmount: 3000, 
+    barberAmount: 2000, 
+  },
+  'child-service': { 
+    serviceAmount: 3000, 
+    salonAmount: 2000, 
+    barberAmount: 1000, 
+  },
+  'beard-service': { 
+    serviceAmount: 3000, 
+    salonAmount: 2000, 
+    barberAmount: 1000, 
+  },
+  'haircut-blackmask-12000': { 
+    serviceAmount: 12000, 
+    salonAmount: 4000, 
+    barberAmount: 2000, 
+    barberAssistantAmount: 1000, 
+    blackMaskAmount: 4000, 
+    blackMaskAssistantAmount: 1000 
+  },
+  'haircut-blackshampoo-12000': { 
+    serviceAmount: 12000, 
+    salonAmount: 4000, 
+    barberAmount: 2000,
+    barberAssistantAmount: 1000,
+    blackShampooAmount:4000,
+    blackShampooAssistantAmount: 1000 
+  },
+  'haircut-blackshampoo-10000': { 
+    serviceAmount: 10000, 
+    salonAmount: 4000, 
+    barberAmount: 2000,
+    barberAssistantAmount: 1000,
+    blackShampooAmount:3000,
+    blackShampooAssistantAmount: 1000 
+  },
+  'haircut-superblack-15000': { 
+    serviceAmount: 15000, 
+    salonAmount: 4000, 
+    barberAmount: 2000,
+    barberAssistantAmount: 1000,
+    superBlackAmount:6000,
+    superBlackAssistantAmount: 2000 
+  },
+  'scrub-only-3000': { 
+    serviceAmount: 3000, 
+    scrubAmount: 2000,
+    scrubAssistantAmount: 1000,
+  },
+  'scrub-only-5000': { 
+    serviceAmount: 5000, 
+    scrubAmount: 4000, 
+    scrubAssistantAmount: 1000 
+  },
+  'blackshampoo-only-3000': { 
+    serviceAmount: 3000, 
+    blackShampooAmount: 2000,  
+    blackShampooAssistantAmount: 1000 
+  },
+  'blackshampoo-only-5000': { 
+    serviceAmount: 5000, 
+    blackShampooAmount: 4000, 
+    blackShampooAssistantAmount: 1000
+  }
 };
 
+
+
+
+const staffDB = {
+    staff: ["John", "David", "Paul", "Mike", "Sam", "Chris", "Anna", "Joy", "Mary","Brian", "Alex", "shamim", "linda"]
+  };
+
+
 export default function ServiceForm({ onSubmit, onClose }) {
+
   const [formData, setFormData] = useState({
-    service: '',
-    barber: '',
-    assistant: '',
+    service: "",
+    barber: "",
+    barberAssistant: "",
+    scrubberAssistant: "",
+    blackMaskAssistant: "",
+    blackShampooAssistant: "",
+    superBlackAssistant: "",
   });
 
   const handleChange = (e) => {
@@ -22,20 +105,47 @@ export default function ServiceForm({ onSubmit, onClose }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+const { 
+  service, 
+  barber, 
+  barberAssistant, 
+  scrubberAssistant, 
+  blackShampooAssistant, 
+  superBlackAssistant, 
+  blackMaskAssistant 
+} = formData;
 
-    const { service, barber, assistant } = formData;
-    const calculation = serviceMap[service];
-    if (!calculation) return alert('Invalid service selected');
+const calculation = serviceMap[service];
+if (!calculation) return alert('Invalid service selected');
 
-    const payload = {
-      name: service,
-      service_amount: calculation.service_amount,
-      barber,
-      barber_amount: calculation.barber_amount,
-      assistant: calculation.assistant_amount > 0 ? assistant : null,
-      assistant_amount: calculation.assistant_amount > 0 ? calculation.assistant_amount : null,
-      salon_amount: calculation.salon_amount,
-    };
+const payload = {
+  name: service,
+
+  service_amount: calculation.serviceAmount || 0,
+  salon_amount: calculation.salonAmount || 0,
+
+  barber: barber || null,
+  barber_amount: calculation.barberAmount || 0,
+
+  barber_assistant: barberAssistant || null,
+  barber_assistant_amount: calculation.barberAssistantAmount || 0,
+
+  scrubber_assistant: scrubberAssistant || null,
+  scrubber_assistant_amount: calculation.scrubAssistantAmount || 0,
+
+  black_shampoo_assistant: blackShampooAssistant || null,
+  black_shampoo_assistant_amount: calculation.blackShampooAssistantAmount || 0,
+  black_shampoo_amount: calculation.blackShampooAmount || 0,
+
+  super_black_assistant: superBlackAssistant || null,
+  super_black_assistant_amount: calculation.superBlackAssistantAmount || 0,
+  super_black_amount: calculation.superBlackAmount || 0,
+
+  black_mask_assistant: blackMaskAssistant || null,
+  black_mask_assistant_amount: calculation.blackMaskAssistantAmount || 0,
+  black_mask_amount: calculation.blackMaskAmount || 0
+};
 
     try {
       await onSubmit(payload);
@@ -45,36 +155,371 @@ export default function ServiceForm({ onSubmit, onClose }) {
     }
   };
 
-  return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <select name="service" value={formData.service} onChange={handleChange} className="w-full border px-3 py-2 rounded">
-        <option value="">Select Service</option>
-        <option value="7000-service">7000 Service</option>
-        <option value="5000-service">5000 Service</option>
-        <option value="child-service">Child Service</option>
-      </select>
-
-      <select name="barber" value={formData.barber} onChange={handleChange} className="w-full border px-3 py-2 rounded">
-        <option value="">Select Barber</option>
-        <option value="John">John</option>
-        <option value="Jane">Jane</option>
-      </select>
-
+    return (
+  <form onSubmit={handleSubmit} className="space-y-4">
+    {/* Service selection */}
+    <div>
+      <label className="block mb-1 font-medium">Choose service</label>
       <select
-        name="assistant"
-        value={formData.assistant}
+        name="service"
+        value={formData.service}
         onChange={handleChange}
-        className="w-full border px-3 py-2 rounded"
-        disabled={formData.service === '5000-service' || formData.service === 'child-service'}
+        className="w-full border rounded px-2 py-1"
       >
-        <option value="">Select Assistant</option>
-        <option value="Kelly">Kelly</option>
-        <option value="Sam">Sam</option>
+        <option value=""></option>
+        <option value="7000-service">7000 service</option>
+        <option value="5000-service">5000 service</option>
+        <option value="child-service">Child Service</option>
+        <option value="beard-service">Beard Service</option>
+        <option value="haircut-blackmask-12000">Haircut + Blackmask (12000)</option>
+        <option value="haircut-blackshampoo-12000">Haircut + Blackshampoo (12000)</option>
+        <option value="haircut-blackshampoo-10000">Haircut + Blackshampoo (10000)</option>
+        <option value="haircut-superblack-15000">Haircut + SuperBlack (15000)</option>
+        <option value="scrub-only-3000">Scrub only (3000)</option>
+        <option value="scrub-only-5000">Scrub only (5000)</option>
+        <option value="blackshampoo-only-3000">Blackshampoo only (3000)</option>
+        <option value="blackshampoo-only-5000">Blackshampoo only (5000)</option>
       </select>
+    </div>
 
-      <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded">
-        Submit
-      </button>
-    </form>
-  );
+    {/* 7000-service */}
+    {formData.service === "7000-service" && (
+      <>
+        <div>
+          <label className="block mb-1">Barber</label>
+          <select
+            name="barber"
+            onChange={handleChange}
+            className="w-full border rounded px-2 py-1"
+          >
+            <option value=""></option>
+            {staffDB.staff.map(name => (
+              <option key={name} value={name}>{name}</option>
+            ))}
+          </select>
+        </div>
+        <div>
+          <label className="block mb-1">Barber Assistant</label>
+          <select
+            name="barberAssistant"
+            onChange={handleChange}
+            className="w-full border rounded px-2 py-1"
+          >
+            <option value=""></option>
+            {staffDB.staff.map(name => (
+              <option key={name} value={name}>{name}</option>
+            ))}
+          </select>
+        </div>
+      </>
+    )}
+
+    {/* 5000-service */}
+    {formData.service === "5000-service" && (
+      <div>
+        <label className="block mb-1">Barber</label>
+        <select
+          name="barber"
+          onChange={handleChange}
+          className="w-full border rounded px-2 py-1"
+        >
+          <option value=""></option>
+          {staffDB.staff.map(name => (
+            <option key={name} value={name}>{name}</option>
+          ))}
+        </select>
+      </div>
+    )}
+
+    {/* child-service */}
+    {formData.service === "child-service" && (
+      <div>
+        <label className="block mb-1">Barber</label>
+        <select
+          name="barber"
+          onChange={handleChange}
+          className="w-full border rounded px-2 py-1"
+        >
+          <option value=""></option>
+          {staffDB.staff.map(name => (
+            <option key={name} value={name}>{name}</option>
+          ))}
+        </select>
+      </div>
+    )}
+
+    {/* beard-service */}
+    {formData.service === "beard-service" && (
+      <div>
+        <label className="block mb-1">Barber</label>
+        <select
+          name="barber"
+          onChange={handleChange}
+          className="w-full border rounded px-2 py-1"
+        >
+          <option value=""></option>
+          {staffDB.staff.map(name => (
+            <option key={name} value={name}>{name}</option>
+          ))}
+        </select>
+      </div>
+    )}
+
+    {/* haircut-blackmask-12000 */}
+    {formData.service === "haircut-blackmask-12000" && (
+      <>
+        <div>
+          <label className="block mb-1">Barber</label>
+          <select
+            name="barber"
+            onChange={handleChange}
+            className="w-full border rounded px-2 py-1"
+          >
+            <option value=""></option>
+            {staffDB.staff.map(name => (
+              <option key={name} value={name}>{name}</option>
+            ))}
+          </select>
+        </div>
+        <div>
+          <label className="block mb-1">Barber Assistant</label>
+          <select
+            name="barberAssistant"
+            onChange={handleChange}
+            className="w-full border rounded px-2 py-1"
+          >
+            <option value=""></option>
+            {staffDB.staff.map(name => (
+              <option key={name} value={name}>{name}</option>
+            ))}
+          </select>
+        </div>
+        <div>
+          <label className="block mb-1">Black Mask Assistant</label>
+          <select
+            name="blackMaskAssistant"
+            onChange={handleChange}
+            className="w-full border rounded px-2 py-1"
+          >
+            <option value=""></option>
+            {staffDB.staff.map(name => (
+              <option key={name} value={name}>{name}</option>
+            ))}
+          </select>
+        </div>
+      </>
+    )}
+
+    {/* haircut-blackshampoo-12000 */}
+    {formData.service === "haircut-blackshampoo-12000" && (
+      <>
+        <div>
+          <label className="block mb-1">Barber</label>
+          <select
+            name="barber"
+            onChange={handleChange}
+            className="w-full border rounded px-2 py-1"
+          >
+            <option value=""></option>
+            {staffDB.staff.map(name => (
+              <option key={name} value={name}>{name}</option>
+            ))}
+          </select>
+        </div>
+        <div>
+          <label className="block mb-1">Barber Assistant</label>
+          <select
+            name="barberAssistant"
+            onChange={handleChange}
+            className="w-full border rounded px-2 py-1"
+          >
+            <option value=""></option>
+            {staffDB.staff.map(name => (
+              <option key={name} value={name}>{name}</option>
+            ))}
+          </select>
+        </div>
+        <div>
+          <label className="block mb-1">Black Shampoo Assistant</label>
+          <select
+            name="blackShampooAssistant"
+            onChange={handleChange}
+            className="w-full border rounded px-2 py-1"
+          >
+            <option value=""></option>
+            {staffDB.staff.map(name => (
+              <option key={name} value={name}>{name}</option>
+            ))}
+          </select>
+        </div>
+      </>
+    )}
+
+    {/* haircut-blackshampoo-10000 */}
+    {formData.service === "haircut-blackshampoo-10000" && (
+      <>
+        <div>
+          <label className="block mb-1">Barber</label>
+          <select
+            name="barber"
+            onChange={handleChange}
+            className="w-full border rounded px-2 py-1"
+          >
+            <option value=""></option>
+            {staffDB.staff.map(name => (
+              <option key={name} value={name}>{name}</option>
+            ))}
+          </select>
+        </div>
+        <div>
+          <label className="block mb-1">Barber Assistant</label>
+          <select
+            name="barberAssistant"
+            onChange={handleChange}
+            className="w-full border rounded px-2 py-1"
+          >
+            <option value=""></option>
+            {staffDB.staff.map(name => (
+              <option key={name} value={name}>{name}</option>
+            ))}
+          </select>
+        </div>
+        <div>
+          <label className="block mb-1">Black Shampoo Assistant</label>
+          <select
+            name="blackShampooAssistant"
+            onChange={handleChange}
+            className="w-full border rounded px-2 py-1"
+          >
+            <option value=""></option>
+            {staffDB.staff.map(name => (
+              <option key={name} value={name}>{name}</option>
+            ))}
+          </select>
+        </div>
+      </>
+    )}
+
+    {/* haircut-superblack-15000 */}
+    {formData.service === "haircut-superblack-15000" && (
+      <>
+        <div>
+          <label className="block mb-1">Barber</label>
+          <select
+            name="barber"
+            onChange={handleChange}
+            className="w-full border rounded px-2 py-1"
+          >
+            <option value=""></option>
+            {staffDB.staff.map(name => (
+              <option key={name} value={name}>{name}</option>
+            ))}
+          </select>
+        </div>
+        <div>
+          <label className="block mb-1">Barber Assistant</label>
+          <select
+            name="barberAssistant"
+            onChange={handleChange}
+            className="w-full border rounded px-2 py-1"
+          >
+            <option value=""></option>
+            {staffDB.staff.map(name => (
+              <option key={name} value={name}>{name}</option>
+            ))}
+          </select>
+        </div>
+        <div>
+          <label className="block mb-1">SuperBlack Assistant</label>
+          <select
+            name="superBlackAssistant"
+            onChange={handleChange}
+            className="w-full border rounded px-2 py-1"
+          >
+            <option value=""></option>
+            {staffDB.staff.map(name => (
+              <option key={name} value={name}>{name}</option>
+            ))}
+          </select>
+        </div>
+      </>
+    )}
+
+    {/* scrub-only-3000 */}
+    {formData.service === "scrub-only-3000" && (
+      <div>
+        <label className="block mb-1">Scrubber Assistant</label>
+        <select
+          name="scrubberAssistant"
+          onChange={handleChange}
+          className="w-full border rounded px-2 py-1"
+        >
+          <option value=""></option>
+          {staffDB.staff.map(name => (
+            <option key={name} value={name}>{name}</option>
+          ))}
+        </select>
+      </div>
+    )}
+
+    {/* scrub-only-5000 */}
+    {formData.service === "scrub-only-5000" && (
+      <div>
+        <label className="block mb-1">Scrubber Assistant</label>
+        <select
+          name="scrubberAssistant"
+          onChange={handleChange}
+          className="w-full border rounded px-2 py-1"
+        >
+          <option value=""></option>
+          {staffDB.staff.map(name => (
+            <option key={name} value={name}>{name}</option>
+          ))}
+        </select>
+      </div>
+    )}
+
+    {/* blackshampoo-only-3000 */}
+    {formData.service === "blackshampoo-only-3000" && (
+      <div>
+        <label className="block mb-1">Black Shampoo Assistant</label>
+        <select
+          name="blackShampooAssistant"
+          onChange={handleChange}
+          className="w-full border rounded px-2 py-1"
+        >
+          <option value=""></option>
+          {staffDB.staff.map(name => (
+            <option key={name} value={name}>{name}</option>
+          ))}
+        </select>
+      </div>
+    )}
+
+    {/* blackshampoo-only-5000 */}
+    {formData.service === "blackshampoo-only-5000" && (
+      <div>
+        <label className="block mb-1">Black Shampoo Assistant</label>
+        <select
+          name="blackShampooAssistant"
+          onChange={handleChange}
+          className="w-full border rounded px-2 py-1"
+        >
+          <option value=""></option>
+          {staffDB.staff.map(name => (
+            <option key={name} value={name}>{name}</option>
+          ))}
+        </select>
+      </div>
+    )}
+
+    <button
+      className="mt-4 bg-blue-400 hover:bg-blue-600 text-white py-2 px-4 rounded"
+      type="submit"
+    >
+      Submit
+    </button>
+  </form>
+);
+
 }
