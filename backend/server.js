@@ -6,6 +6,7 @@ dotenv.config();
 
 import servicesRoutes from './routes/servicesRoutes.js'
 import expensesRoutes from './routes/expensesRoutes.js'
+import advancesRoutes from './routes/advancesRoutes.js'
 
 const app = express();
 app.use(cors());
@@ -13,6 +14,7 @@ app.use(express.json());
 
 app.use('/api/services', servicesRoutes);
 app.use('/api/expenses', expensesRoutes);
+app.use('/api/advances', advancesRoutes);
 
 const PORT = process.env.PORT || 5500;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
