@@ -39,14 +39,24 @@ export default function Dashboard() {
     }
   };
 
-  const handleClocking = async (formData) => {
-    try {
-      await axios.post('http://localhost:5500/api/clocking', formData);
-      closeModal();
-    } catch (err) {
-      console.error('Failed to submit advance', err);
+  const handleClocking = async (type, formData) => {
+  try {
+    if (type === "clockin") {
+      const res = await axios.post("http://localhost:5500/api/clockings", formData);
+      console.log("Clock in success:", res.data);
+
+    } else if (type === "clockout") {
+      const res = await axios.put("http://localhost:5500/api/clockings", formData);
+      console.log("Clock out success:", res.data);
+
+    } else {
+      console.error("Invalid clocking type");
     }
-  };
+  } catch (err) {
+    console.error("Error handling clocking:", err.response?.data || err.message);
+  }
+};
+
   return (
     <div className="space-y-10">
       <Button onClick={() => setModalType('service')}>Add Service</Button>

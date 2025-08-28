@@ -1,38 +1,62 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
+
+const mockEmployees = [
+  { id: 1, first_name: "Jane", last_name: "Doe" },
+  { id: 2, first_name: "John", last_name: "Smith" },
+  { id: 3, first_name: "Sarah", last_name: "Johnson" },
+  { id: 4, first_name: "Paul", last_name: "Brown" },
+  { id: 5, first_name: "Emily", last_name: "Davis" },
+  { id: 6, first_name: "Michael", last_name: "Wilson" },
+  { id: 7, first_name: "Laura", last_name: "Taylor" },
+  { id: 8, first_name: "David", last_name: "Anderson" },
+  { id: 9, first_name: "Sophia", last_name: "Thomas" },
+  { id: 10, first_name: "Daniel", last_name: "Martinez" },
+];
 
 export default function ClockForm({ onSubmit, onClose }) {
   const [currentTime, setCurrentTime] = useState(new Date());
-  const [form, setForm] = useState({
-    employeeName: '',
+  const [formData, setFormData] = useState({
+    employeeId: "",
     clockIn: null,
     clockOut: null,
   });
 
-  // update digital clock every second
   useEffect(() => {
     const timer = setInterval(() => setCurrentTime(new Date()), 1000);
     return () => clearInterval(timer);
   }, []);
 
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+  const handleEmployeeChange = (e) => {
+    setFormData((prev) => ({ ...prev, employeeId: e.target.value }));
   };
 
   const handleClockIn = () => {
-    setForm({ ...form, clockIn: new Date().toISOString() });
+  const updatedForm = {
+    ...formData,
+    clockIn: new Date().toISOString(),
+    clockOut: null, 
   };
 
-  const handleClockOut = () => {
-    setForm({ ...form, clockOut: new Date().toISOString() });
+  setFormData(updatedForm);  
+  onSubmit("clockin", updatedForm); 
+  onClose();             
+};
+
+const handleClockOut = () => {
+  const updatedForm = {
+    ...formData,
+    clockOut: new Date().toISOString(),
+
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    onSubmit(form);
-  };
+  setFormData(updatedForm);  
+  onSubmit("clockout", updatedForm); 
+  onClose();       
+};
+
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <div className="space-y-6">
       {/* Digital Clock */}
       <div className="text-center text-2xl font-bold">
         {currentTime.toLocaleTimeString()}
@@ -40,15 +64,21 @@ export default function ClockForm({ onSubmit, onClose }) {
 
       <h2 className="text-xl font-bold">Employee Clock In / Clock Out</h2>
 
-      {/* Employee name */}
-      <input
-        type="text"
-        name="employeeName"
-        placeholder="Employee Name"
-        onChange={handleChange}
+      {/* Employee dropdown */}
+      <select
+        name="employeeId"
+        value={formData.employeeId}
+        onChange={handleEmployeeChange}
         required
         className="w-full border px-2 py-1"
-      />
+      >
+        <option value="">Select Employee</option>
+        {mockEmployees.map((emp) => (
+          <option key={emp.id} value={emp.id}>
+            {emp.first_name} {emp.last_name}
+          </option>
+        ))}
+      </select>
 
       {/* Clock in/out buttons */}
       <div className="flex gap-4">
@@ -68,24 +98,8 @@ export default function ClockForm({ onSubmit, onClose }) {
         </button>
       </div>
 
-      {/* Display recorded times */}
-      <div className="space-y-2 text-sm text-gray-700">
-        {form.clockIn && (
-          <p>Clocked in at: {new Date(form.clockIn).toLocaleTimeString()}</p>
-        )}
-        {form.clockOut && (
-          <p>Clocked out at: {new Date(form.clockOut).toLocaleTimeString()}</p>
-        )}
-      </div>
-
-      {/* Submit + Cancel */}
+      {/* Cancel */}
       <div className="flex gap-4">
-        <button
-          type="submit"
-          className="btn bg-blue-600 text-white px-4 py-2 rounded"
-        >
-          Submit
-        </button>
         <button
           type="button"
           onClick={onClose}
@@ -94,6 +108,6 @@ export default function ClockForm({ onSubmit, onClose }) {
           Cancel
         </button>
       </div>
-    </form>
+    </div>
   );
 }
