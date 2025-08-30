@@ -4,21 +4,20 @@ export default function AdvanceForm({ onSubmit, onClose }) {
   const [form, setForm] = useState({ employee_id: '', amount: '', description: '' });
   const [employees, setEmployees] = useState([]);
 
-  useEffect(() => {
-    // Replace with API call to fetch employees from database
-    setEmployees([
-      { id: 1, first_name: 'Jane', last_name: 'Doe' },
-      { id: 2, first_name: 'John', last_name: 'Smith' },
-      { id: 3, first_name: 'Sarah', last_name: 'Johnson' },
-      { id: 4, first_name: 'Paul', last_name: 'Brown' },
-      { id: 5, first_name: 'Emily', last_name: 'Davis' },
-      { id: 6, first_name: 'Michael', last_name: 'Wilson' },
-      { id: 7, first_name: 'Laura', last_name: 'Taylor' },
-      { id: 8, first_name: 'David', last_name: 'Anderson' },
-      { id: 9, first_name: 'Sophia', last_name: 'Thomas' },
-      { id: 10, first_name: 'Daniel', last_name: 'Martinez' },
-    ]);
-  }, []);
+  const mockEmployees = [
+  { id: 1, first_name: "Tagoole", last_name: "Nathan", phone: "705715763" },
+  { id: 2, first_name: "Mukungu", last_name: "Ismail", phone: "755686550" },
+  { id: 3, first_name: "Direse", last_name: "Arafat", phone: "742259330" },
+  { id: 4, first_name: "Nambi", last_name: "Aisha", phone: "753541883" },
+  { id: 5, first_name: "Mutesi", last_name: "Shamina", phone: "745930298" },
+  { id: 6, first_name: "Nantongo", last_name: "Jazimin", phone: "703093092" },
+  { id: 7, first_name: "Nakaibale", last_name: "Sharon", phone: "752272415" },
+  { id: 8, first_name: "Kyewayenda", last_name: "Brenda", phone: "752853209" },
+  { id: 9, first_name: "Tusubira", last_name: "David tobex", phone: "788517650" },
+  { id: 10, first_name: "Kwikiriza", last_name: "Phinnah", phone: "742927521" },
+  { id: 11, first_name: "Muzale Grace", last_name: "innocent", phone: "754954054" },
+  { id: 12, first_name: "Tendo", last_name: "Mirembe", phone: "750795036" },
+];
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -44,7 +43,7 @@ export default function AdvanceForm({ onSubmit, onClose }) {
           required
         >
           <option value="">Select Employee</option>
-          {employees.map((emp) => (
+          {mockEmployees.map((emp) => (
             <option key={emp.id} value={emp.id}>
               {emp.first_name} {emp.last_name}
             </option>
