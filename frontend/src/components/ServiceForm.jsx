@@ -54,6 +54,23 @@ const serviceMap = {
     superBlackAmount:6000,
     superBlackAssistantAmount: 2000 
   },
+  'trimming-scrub-5000': { 
+    serviceAmount: 5000, 
+    salonAmount: 3000, 
+    barberAmount: 1000,
+    barberAssistantAmount: 1000 
+  },
+  'haircut-honey-10000': { 
+    serviceAmount: 10000, 
+    salonAmount: 6000, 
+    barberAmount: 2000,
+    barberAssistantAmount: 2000
+  },
+  'haircut-women': { 
+    serviceAmount: 10000, 
+    salonAmount: 6000, 
+    barberAmount: 4000,
+  },
   'scrub-only-3000': { 
     serviceAmount: 3000, 
     scrubAmount: 2000,
@@ -183,6 +200,9 @@ const payload = {
         <option value="beard-service">Beard Service</option>
         <option value="haircut-blackmask-12000">Haircut + Blackmask (12000)</option>
         <option value="haircut-blackshampoo-12000">Haircut + Blackshampoo (12000)</option>
+        <option value="trimming-scrub-5000">Trimming + Scrub (5000)</option>
+        <option value="haircut-honey-10000">Haircut + Honey (10000)</option>
+        <option value="haircut-women">Haircut Women</option>
         <option value="haircut-blackshampoo-10000">Haircut + Blackshampoo (10000)</option>
         <option value="haircut-superblack-15000">Haircut + SuperBlack (15000)</option>
         <option value="scrub-only-3000">Scrub only (3000)</option>
@@ -317,9 +337,11 @@ const payload = {
             className="w-full border rounded px-2 py-1"
           >
             <option value=""></option>
-            {staffDB.staff.map(name => (
-              <option key={name} value={name}>{name}</option>
-            ))}
+            {mockEmployees.map((emp) => (
+  <option key={emp.id} value={emp.id}>
+    {emp.first_name} {emp.last_name}
+  </option>
+))}
           </select>
         </div>
         <div>
@@ -341,6 +363,105 @@ const payload = {
       </>
     )}
 
+
+    {/* trimming-scrub-5000 */}
+    {formData.service === "trimming-scrub-5000" && (
+      <>
+        <div>
+          <label className="block mb-1">Barber</label>
+          <select
+            name="barber"
+            onChange={handleChange}
+            className="w-full border rounded px-2 py-1"
+          >
+            <option value=""></option>
+            {mockEmployees.map((emp) => (
+  <option key={emp.id} value={emp.id}>
+    {emp.first_name} {emp.last_name}
+  </option>
+))}
+
+          </select>
+        </div>
+        <div>
+          <label className="block mb-1">Barber Assistant</label>
+          <select
+            name="barberAssistant"
+            onChange={handleChange}
+            className="w-full border rounded px-2 py-1"
+          >
+            <option value=""></option>
+            {mockEmployees.map((emp) => (
+  <option key={emp.id} value={emp.id}>
+    {emp.first_name} {emp.last_name}
+  </option>
+))}
+          </select>
+        </div>
+      </>
+    )}
+  
+
+    {/* haircut-honey-10000 */}
+    {formData.service === "haircut-honey-10000" && (
+      <>
+        <div>
+          <label className="block mb-1">Barber</label>
+          <select
+            name="barber"
+            onChange={handleChange}
+            className="w-full border rounded px-2 py-1"
+          >
+            <option value=""></option>
+            {mockEmployees.map((emp) => (
+  <option key={emp.id} value={emp.id}>
+    {emp.first_name} {emp.last_name}
+  </option>
+))}
+
+          </select>
+        </div>
+        <div>
+          <label className="block mb-1">Barber Assistant</label>
+          <select
+            name="barberAssistant"
+            onChange={handleChange}
+            className="w-full border rounded px-2 py-1"
+          >
+            <option value=""></option>
+            {mockEmployees.map((emp) => (
+  <option key={emp.id} value={emp.id}>
+    {emp.first_name} {emp.last_name}
+  </option>
+))}
+          </select>
+        </div>
+      </>
+    )}
+
+    {/* haircut-women */}
+    {formData.service === "haircut-women" && (
+      <>
+        <div>
+          <label className="block mb-1">Barber</label>
+          <select
+            name="barber"
+            onChange={handleChange}
+            className="w-full border rounded px-2 py-1"
+          >
+            <option value=""></option>
+            {mockEmployees.map((emp) => (
+  <option key={emp.id} value={emp.id}>
+    {emp.first_name} {emp.last_name}
+  </option>
+))}
+
+          </select>
+        </div>
+      </>
+    )}
+
+
     {/* haircut-blackshampoo-12000 */}
     {formData.service === "haircut-blackshampoo-12000" && (
       <>
@@ -352,9 +473,11 @@ const payload = {
             className="w-full border rounded px-2 py-1"
           >
             <option value=""></option>
-            {staffDB.staff.map(name => (
-              <option key={name} value={name}>{name}</option>
-            ))}
+            {mockEmployees.map((emp) => (
+  <option key={emp.id} value={emp.id}>
+    {emp.first_name} {emp.last_name}
+  </option>
+))}
           </select>
         </div>
         <div>
