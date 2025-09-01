@@ -9,6 +9,39 @@ import ClockForm from '../components/ClockForm';
 
 export default function Dashboard() {
   const [modalType, setModalType] = useState(null);
+  const [salonStatus, setSalonStatus] = useState("closed");
+
+  const handleSalonSession = async (status) => {
+    try {
+      let formData;
+
+      if (status === "open") {
+        formData = {
+          openTime: new Date().toISOString(),
+          closeTime: null,
+          status: "open",
+        };
+        
+        const res = await axios.post("http://localhost:5500/api/sessions", formData);
+        console.log("Salon opened:", res.data);
+        setSalonStatus(status)
+
+      } else if (status === "closed") {
+        formData = {
+          closeTime: new Date().toISOString(),
+          status: "closed",
+        };
+
+        const res = await axios.put("http://localhost:5500/api/sessions", formData);
+        console.log("Salon closed:", res.data);
+      }
+
+      setSalonStatus(status); 
+    } catch (err) {
+      console.error("Error handling salon session:", err.response?.data || err.message);
+    }
+  };
+
 
   const closeModal = () => setModalType(null);
 
@@ -59,6 +92,14 @@ export default function Dashboard() {
 
   return (
     <div className="space-y-10">
+      <div className="space-y-10">
+      {salonStatus === "closed" && (
+        <Button className='bg-green-400 hover:bg-green-300' onClick={() => handleSalonSession("open")}>Open Salon</Button>
+      )}
+      {salonStatus === "open" && (
+        <Button onClick={() => handleSalonSession("closed")}>Close Salon</Button>
+      )}
+    </div>
       <Button onClick={() => setModalType('service')}>Add Service</Button>
       <Button onClick={() => setModalType('expense')}>Add Expense</Button>
       <Button onClick={() => setModalType('advance')}>Add Advance</Button>
