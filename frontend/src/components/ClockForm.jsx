@@ -19,7 +19,7 @@ const mockEmployees = [
 export default function ClockForm({ onSubmit, onClose }) {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [formData, setFormData] = useState({
-    employeeId: "",
+    employeeName: "",
     clockIn: null,
     clockOut: null,
   });
@@ -30,7 +30,7 @@ export default function ClockForm({ onSubmit, onClose }) {
   }, []);
 
   const handleEmployeeChange = (e) => {
-    setFormData((prev) => ({ ...prev, employeeId: e.target.value }));
+    setFormData((prev) => ({ ...prev, employeeName: e.target.value }));
   };
 
   const handleClockIn = () => {
@@ -77,7 +77,7 @@ const handleClockOut = () => {
       >
         <option value="">Select Employee</option>
         {mockEmployees.map((emp) => (
-          <option key={emp.id} value={emp.id}>
+          <option key={emp.id} value={`${emp.first_name} ${emp.last_name}`}>
             {emp.first_name} {emp.last_name}
           </option>
         ))}

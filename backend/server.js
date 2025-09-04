@@ -1,14 +1,15 @@
-import express from 'express'
-import cors from 'cors'
-import database from './models/database.js'
+import express from 'express';
+import cors from 'cors';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
 dotenv.config();
 
-import servicesRoutes from './routes/servicesRoutes.js'
-import expensesRoutes from './routes/expensesRoutes.js'
-import advancesRoutes from './routes/advancesRoutes.js'
-import clockingsRoutes from './routes/clockingsRoutes.js'
-import sessionsRoutes from './routes/sessionsRoutes.js'
+import servicesRoutes from './routes/servicesRoutes.js';
+import expensesRoutes from './routes/expensesRoutes.js';
+import advancesRoutes from './routes/advancesRoutes.js';
+import clockingsRoutes from './routes/clockingsRoutes.js';
+import sessionsRoutes from './routes/sessionsRoutes.js';
 
 const app = express();
 app.use(cors());
@@ -20,6 +21,15 @@ app.use('/api/advances', advancesRoutes);
 app.use('/api/clockings', clockingsRoutes);
 app.use('/api/sessions', sessionsRoutes);
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const frontendPath = path.join(__dirname, '../frontend/dist');
+app.use(express.static(frontendPath));
+
+// Catch-all for React SPA (Express 5 compatible)
+app.get('/{*splat}', (req, res) => {
+  res.sendFile(path.resolve(frontendPath, 'index.html'));
+});
 
 const PORT = process.env.PORT || 5500;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

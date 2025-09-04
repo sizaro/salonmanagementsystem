@@ -1,4 +1,4 @@
-import { saveService } from "../models/servicesModel.js";
+import { saveService, fetchAllServices } from "../models/servicesModel.js";
 
 export const createService = async (req, res) => {
   try {
@@ -71,6 +71,18 @@ export const createService = async (req, res) => {
 };
 
 
+export const getAllServices = async (req, res) => {
+  try {
+    const services = await fetchAllServices();
+    console.log("this is in the controller for services", services)
+    res.status(200).json(services);
+  } catch (err) {
+    console.error('Error fetching services:', err);
+    res.status(500).json({ error: 'Failed to fetch services' });
+  }
+};
+
 export default {
   createService,
+  getAllServices,
 };

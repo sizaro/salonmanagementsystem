@@ -23,16 +23,16 @@ export const saveClocking = async (
 };
 
 // Update (clock out)
-export const updateClockingModel = async (employeeId, clockOut) => {
+export const updateClockingModel = async (employeeName, clockOut) => {
   const query = `
     UPDATE employee_clocking
     SET clock_out = $1, updated_at = NOW()
-    WHERE employee_id = $2
+    WHERE employee_names = $2
       AND clock_out IS NULL
     RETURNING *
   `;
 
-  const values = [clockOut, employeeId];
+  const values = [clockOut, employeeName];
 
   const { rows } = await db.query(query, values);
   return rows[0]; // returns the updated clocking row

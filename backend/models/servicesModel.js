@@ -70,3 +70,11 @@ export const saveService = async ({
 
   await db.query(query, values);
 };
+
+
+export const fetchAllServices = async () => {
+  const query = `SELECT * FROM services ORDER BY id DESC;`;
+  const result = await db.query(query);
+  console.log("this is what the data from the database for all services", result.rows)
+  return result.rows
+};

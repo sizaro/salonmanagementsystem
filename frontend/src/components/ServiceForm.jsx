@@ -224,7 +224,7 @@ const payload = {
           >
             <option value=""></option>
             {mockEmployees.map((emp) => (
-  <option key={emp.id} value={emp.id}>
+  <option key={emp.id} value={`${emp.first_name} ${emp.last_name}`}>
     {emp.first_name} {emp.last_name}
   </option>
 ))}
@@ -240,7 +240,7 @@ const payload = {
           >
             <option value=""></option>
             {mockEmployees.map((emp) => (
-  <option key={emp.id} value={emp.id}>
+  <option key={emp.id} value={`${emp.first_name} ${emp.last_name}`}>
     {emp.first_name} {emp.last_name}
   </option>
 ))}
@@ -261,7 +261,7 @@ const payload = {
         >
           <option value=""></option>
           {mockEmployees.map((emp) => (
-  <option key={emp.id} value={emp.id}>
+  <option key={emp.id} value={`${emp.first_name} ${emp.last_name}`}>
     {emp.first_name} {emp.last_name}
   </option>
 ))}
@@ -281,7 +281,7 @@ const payload = {
         >
           <option value=""></option>
           {mockEmployees.map((emp) => (
-  <option key={emp.id} value={emp.id}>
+  <option key={emp.id} value={`${emp.first_name} ${emp.last_name}`}>
     {emp.first_name} {emp.last_name}
   </option>
 ))}
@@ -301,7 +301,7 @@ const payload = {
         >
           <option value=""></option>
           {mockEmployees.map((emp) => (
-  <option key={emp.id} value={emp.id}>
+  <option key={emp.id} value={`${emp.first_name} ${emp.last_name}`}>
     {emp.first_name} {emp.last_name}
   </option>
 ))}
@@ -322,7 +322,7 @@ const payload = {
           >
             <option value=""></option>
             {mockEmployees.map((emp) => (
-  <option key={emp.id} value={emp.id}>
+  <option key={emp.id} value={`${emp.first_name} ${emp.last_name}`}>
     {emp.first_name} {emp.last_name}
   </option>
 ))}
@@ -338,7 +338,7 @@ const payload = {
           >
             <option value=""></option>
             {mockEmployees.map((emp) => (
-  <option key={emp.id} value={emp.id}>
+  <option key={emp.id} value={`${emp.first_name} ${emp.last_name}`}>
     {emp.first_name} {emp.last_name}
   </option>
 ))}
@@ -353,7 +353,7 @@ const payload = {
           >
             <option value=""></option>
             {mockEmployees.map((emp) => (
-  <option key={emp.id} value={emp.id}>
+  <option key={emp.id} value={`${emp.first_name} ${emp.last_name}`}>
     {emp.first_name} {emp.last_name}
   </option>
 ))}
@@ -376,7 +376,7 @@ const payload = {
           >
             <option value=""></option>
             {mockEmployees.map((emp) => (
-  <option key={emp.id} value={emp.id}>
+  <option key={emp.id} value={`${emp.first_name} ${emp.last_name}`}>
     {emp.first_name} {emp.last_name}
   </option>
 ))}
@@ -392,7 +392,7 @@ const payload = {
           >
             <option value=""></option>
             {mockEmployees.map((emp) => (
-  <option key={emp.id} value={emp.id}>
+  <option key={emp.id} value={`${emp.first_name} ${emp.last_name}`}>
     {emp.first_name} {emp.last_name}
   </option>
 ))}
@@ -414,7 +414,7 @@ const payload = {
           >
             <option value=""></option>
             {mockEmployees.map((emp) => (
-  <option key={emp.id} value={emp.id}>
+  <option key={emp.id} value={`${emp.first_name} ${emp.last_name}`}>
     {emp.first_name} {emp.last_name}
   </option>
 ))}
@@ -430,7 +430,7 @@ const payload = {
           >
             <option value=""></option>
             {mockEmployees.map((emp) => (
-  <option key={emp.id} value={emp.id}>
+  <option key={emp.id} value={`${emp.first_name} ${emp.last_name}`}>
     {emp.first_name} {emp.last_name}
   </option>
 ))}
@@ -451,7 +451,7 @@ const payload = {
           >
             <option value=""></option>
             {mockEmployees.map((emp) => (
-  <option key={emp.id} value={emp.id}>
+  <option key={emp.id} value={`${emp.first_name} ${emp.last_name}`}>
     {emp.first_name} {emp.last_name}
   </option>
 ))}
@@ -474,7 +474,7 @@ const payload = {
           >
             <option value=""></option>
             {mockEmployees.map((emp) => (
-  <option key={emp.id} value={emp.id}>
+  <option key={emp.id} value={`${emp.first_name} ${emp.last_name}`}>
     {emp.first_name} {emp.last_name}
   </option>
 ))}
@@ -489,7 +489,7 @@ const payload = {
           >
             <option value=""></option>
             {mockEmployees.map((emp) => (
-  <option key={emp.id} value={emp.id}>
+  <option key={emp.id} value={`${emp.first_name} ${emp.last_name}`}>
     {emp.first_name} {emp.last_name}
   </option>
 ))}
@@ -505,7 +505,7 @@ const payload = {
           >
             <option value=""></option>
             {mockEmployees.map((emp) => (
-  <option key={emp.id} value={emp.id}>
+  <option key={emp.id} value={`${emp.first_name} ${emp.last_name}`}>
     {emp.first_name} {emp.last_name}
   </option>
 ))}
@@ -527,7 +527,7 @@ const payload = {
           >
             <option value=""></option>
             {mockEmployees.map((emp) => (
-  <option key={emp.id} value={emp.id}>
+  <option key={emp.id} value={`${emp.first_name} ${emp.last_name}`}>
     {emp.first_name} {emp.last_name}
   </option>
 ))}
@@ -543,7 +543,7 @@ const payload = {
           >
             <option value=""></option>
             {mockEmployees.map((emp) => (
-  <option key={emp.id} value={emp.id}>
+  <option key={emp.id} value={`${emp.first_name} ${emp.last_name}`}>
     {emp.first_name} {emp.last_name}
   </option>
 ))}
@@ -559,7 +559,7 @@ const payload = {
           >
             <option value=""></option>
             {mockEmployees.map((emp) => (
-  <option key={emp.id} value={emp.id}>
+  <option key={emp.id} value={`${emp.first_name} ${emp.last_name}`}>
     {emp.first_name} {emp.last_name}
   </option>
 ))}
@@ -581,7 +581,7 @@ const payload = {
           >
             <option value=""></option>
             {mockEmployees.map((emp) => (
-  <option key={emp.id} value={emp.id}>
+  <option key={emp.id} value={`${emp.first_name} ${emp.last_name}`}>
     {emp.first_name} {emp.last_name}
   </option>
 ))}
@@ -597,7 +597,7 @@ const payload = {
           >
             <option value=""></option>
             {mockEmployees.map((emp) => (
-  <option key={emp.id} value={emp.id}>
+  <option key={emp.id} value={`${emp.first_name} ${emp.last_name}`}>
     {emp.first_name} {emp.last_name}
   </option>
 ))}
@@ -613,7 +613,7 @@ const payload = {
           >
             <option value=""></option>
             {mockEmployees.map((emp) => (
-  <option key={emp.id} value={emp.id}>
+  <option key={emp.id} value={`${emp.first_name} ${emp.last_name}`}>
     {emp.first_name} {emp.last_name}
   </option>
 ))}
@@ -634,7 +634,7 @@ const payload = {
         >
           <option value=""></option>
           {mockEmployees.map((emp) => (
-  <option key={emp.id} value={emp.id}>
+  <option key={emp.id} value={`${emp.first_name} ${emp.last_name}`}>
     {emp.first_name} {emp.last_name}
   </option>
 ))}
@@ -654,7 +654,7 @@ const payload = {
         >
           <option value=""></option>
           {mockEmployees.map((emp) => (
-  <option key={emp.id} value={emp.id}>
+  <option key={emp.id} value={`${emp.first_name} ${emp.last_name}`}>
     {emp.first_name} {emp.last_name}
   </option>
 ))}
@@ -674,7 +674,7 @@ const payload = {
         >
           <option value=""></option>
           {mockEmployees.map((emp) => (
-  <option key={emp.id} value={emp.id}>
+  <option key={emp.id} value={`${emp.first_name} ${emp.last_name}`}>
     {emp.first_name} {emp.last_name}
   </option>
 ))}
@@ -694,7 +694,7 @@ const payload = {
         >
           <option value=""></option>
           {mockEmployees.map((emp) => (
-  <option key={emp.id} value={emp.id}>
+  <option key={emp.id} value={`${emp.first_name} ${emp.last_name}`}>
     {emp.first_name} {emp.last_name}
   </option>
 ))}
