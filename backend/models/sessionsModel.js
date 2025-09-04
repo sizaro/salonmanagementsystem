@@ -37,3 +37,22 @@ export const updateSalonSession = async (closeTime, status) => {
   const { rows } = await db.query(query, values);
   return rows[0]; 
 };
+
+
+export const fetchTodayOpenSalonSession = async () => {
+  try {
+    const results = await db.query(
+      `SELECT * FROM salon_sessions 
+       WHERE DATE(open_time) = CURRENT_DATE 
+         AND close_time IS NULL 
+         AND status = 'open'
+       ORDER BY open_time DESC
+       LIMIT 1`
+    );
+
+    return results.rows || null; // return the open session or null
+  } catch (error) {
+    console.error("Error fetching today's open salon session:", error);
+    throw error;
+  }
+};

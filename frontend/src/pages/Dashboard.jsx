@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Modal from '../components/Modal';
 import ServiceForm from '../components/ServiceForm';
 import ExpenseForm from '../components/ExpenseForm';
@@ -89,6 +89,20 @@ export default function Dashboard() {
     console.error("Error handling clocking:", err.response?.data || err.message);
   }
 };
+
+    useEffect(() => {
+    async function fetchSalonStatus() {
+      try {
+        const res = await axios.get("http://localhost:5500/api/sessions/status"); 
+        console.log("this is the fetched salon status in the frontend", res.data[0].status)
+        setSalonStatus(res.data[0].status); // e.g. "open" or "closed"
+      } catch (err) {
+        console.error("Failed to fetch salon status", err);
+      }
+    }
+
+    fetchSalonStatus();
+  }, []);
 
   return (
     <div className="space-y-10">
