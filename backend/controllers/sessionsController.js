@@ -1,4 +1,4 @@
-import { saveSalonSession, updateSalonSession, fetchTodayOpenSalonSession } from '../models/sessionsModel.js';
+import { saveSalonSession, updateSalonSession, fetchTodaySalonSession } from '../models/sessionsModel.js';
 
 export const openSalonSession = async (req, res) => {
   try {
@@ -36,9 +36,9 @@ export const closeSalonSession = async (req, res) => {
 };
 
 
-export const getSalonStatus = async (req, res) => {
+export const getSalonSession = async (req, res) => {
   try {
-    const session = await fetchTodayOpenSalonSession(); // call model
+    const session = await fetchTodaySalonSession(); // call model
     if (!session) {
       return res.json({ status: "closed" }); // default if no open session today
     }

@@ -39,7 +39,7 @@ export const updateSalonSession = async (closeTime, status) => {
 };
 
 
-export const fetchTodayOpenSalonSession = async () => {
+export const fetchTodaySalonSession = async () => {
   try {
     const results = await db.query(
       `SELECT * FROM salon_sessions 

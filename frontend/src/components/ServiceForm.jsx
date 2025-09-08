@@ -32,11 +32,11 @@ const serviceMap = {
   },
   'haircut-blackshampoo-12000': { 
     serviceAmount: 12000, 
-    salonAmount: 4000, 
+    salonAmount: 3500, 
     barberAmount: 2000,
-    barberAssistantAmount: 1000,
-    blackShampooAmount:4000,
-    blackShampooAssistantAmount: 1000 
+    barberAssistantAmount: 1500,
+    blackShampooAmount:3500,
+    blackShampooAssistantAmount: 1500 
   },
   'haircut-blackshampoo-10000': { 
     serviceAmount: 10000, 
@@ -232,7 +232,7 @@ const payload = {
           </select>
         </div>
         <div>
-          <label className="block mb-1">Barber Assistant</label>
+          <label className="block mb-1">Aesthetician</label>
           <select
             name="barberAssistant"
             onChange={handleChange}
@@ -330,7 +330,7 @@ const payload = {
           </select>
         </div>
         <div>
-          <label className="block mb-1">Barber Assistant</label>
+          <label className="block mb-1">Aesthetician</label>
           <select
             name="barberAssistant"
             onChange={handleChange}
@@ -345,7 +345,7 @@ const payload = {
           </select>
         </div>
         <div>
-          <label className="block mb-1">Black Mask Assistant</label>
+          <label className="block mb-1">Black Mask Aesthetician</label>
           <select
             name="blackMaskAssistant"
             onChange={handleChange}
@@ -384,7 +384,7 @@ const payload = {
           </select>
         </div>
         <div>
-          <label className="block mb-1">Barber Assistant</label>
+          <label className="block mb-1">Aesthetician</label>
           <select
             name="barberAssistant"
             onChange={handleChange}
@@ -422,7 +422,7 @@ const payload = {
           </select>
         </div>
         <div>
-          <label className="block mb-1">Barber Assistant</label>
+          <label className="block mb-1">Aesthetician</label>
           <select
             name="barberAssistant"
             onChange={handleChange}
@@ -481,7 +481,7 @@ const payload = {
           </select>
         </div>
         <div>
-          <label className="block mb-1">Barber Assistant</label>
+          <label className="block mb-1">Aesthetician</label>
           <select
             name="barberAssistant"
             onChange={handleChange}
@@ -497,7 +497,7 @@ const payload = {
           </select>
         </div>
         <div>
-          <label className="block mb-1">Black Shampoo Assistant</label>
+          <label className="block mb-1">Black Shampoo Aesthetician</label>
           <select
             name="blackShampooAssistant"
             onChange={handleChange}
@@ -535,7 +535,7 @@ const payload = {
           </select>
         </div>
         <div>
-          <label className="block mb-1">Barber Assistant</label>
+          <label className="block mb-1">Aesthetician</label>
           <select
             name="barberAssistant"
             onChange={handleChange}
@@ -551,7 +551,7 @@ const payload = {
           </select>
         </div>
         <div>
-          <label className="block mb-1">Black Shampoo Assistant</label>
+          <label className="block mb-1">Black Shampoo Aesthetician</label>
           <select
             name="blackShampooAssistant"
             onChange={handleChange}
@@ -589,7 +589,7 @@ const payload = {
           </select>
         </div>
         <div>
-          <label className="block mb-1">Barber Assistant</label>
+          <label className="block mb-1">Aesthetician</label>
           <select
             name="barberAssistant"
             onChange={handleChange}
@@ -605,7 +605,7 @@ const payload = {
           </select>
         </div>
         <div>
-          <label className="block mb-1">SuperBlack Assistant</label>
+          <label className="block mb-1">SuperBlack Aesthetician</label>
           <select
             name="superBlackAssistant"
             onChange={handleChange}
@@ -626,7 +626,7 @@ const payload = {
     {/* scrub-only-3000 */}
     {formData.service === "scrub-only-3000" && (
       <div>
-        <label className="block mb-1">Scrubber Assistant</label>
+        <label className="block mb-1">Scrubber Aesthetician</label>
         <select
           name="scrubberAssistant"
           onChange={handleChange}
@@ -646,7 +646,7 @@ const payload = {
     {/* scrub-only-5000 */}
     {formData.service === "scrub-only-5000" && (
       <div>
-        <label className="block mb-1">Scrubber Assistant</label>
+        <label className="block mb-1">Scrubber Aesthetician</label>
         <select
           name="scrubberAssistant"
           onChange={handleChange}
@@ -666,7 +666,7 @@ const payload = {
     {/* blackshampoo-only-3000 */}
     {formData.service === "blackshampoo-only-3000" && (
       <div>
-        <label className="block mb-1">Black Shampoo Assistant</label>
+        <label className="block mb-1">Black Shampoo Aesthetician</label>
         <select
           name="blackShampooAssistant"
           onChange={handleChange}
@@ -686,7 +686,7 @@ const payload = {
     {/* blackshampoo-only-5000 */}
     {formData.service === "blackshampoo-only-5000" && (
       <div>
-        <label className="block mb-1">Black Shampoo Assistant</label>
+        <label className="block mb-1">Black Shampoo Aesthetician</label>
         <select
           name="blackShampooAssistant"
           onChange={handleChange}

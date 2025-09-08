@@ -1,15 +1,17 @@
-import { useState, useEffect } from 'react';
-import Modal from '../components/Modal';
-import ServiceForm from '../components/ServiceForm';
-import ExpenseForm from '../components/ExpenseForm';
-import AdvanceForm from '../components/AdvanceForm';
-import Button from '../components/Button';
-import axios from 'axios';
-import ClockForm from '../components/ClockForm';
+import { useState, useEffect } from "react";
+import Modal from "../components/Modal";
+import ServiceForm from "../components/ServiceForm";
+import ExpenseForm from "../components/ExpenseForm";
+import AdvanceForm from "../components/AdvanceForm";
+import Button from "../components/Button";
+import ClockForm from "../components/ClockForm";
+import { useData } from "../context/DataContext.jsx";
 
 export default function Dashboard() {
   const [modalType, setModalType] = useState(null);
   const [salonStatus, setSalonStatus] = useState("closed");
+
+  const { sendFormData, sessions } = useData();
 
   const handleSalonSession = async (status) => {
     try {
@@ -21,88 +23,84 @@ export default function Dashboard() {
           closeTime: null,
           status: "open",
         };
-        
-        const res = await axios.post("http://localhost:5500/api/sessions", formData);
-        console.log("Salon opened:", res.data);
-        setSalonStatus(status)
 
+        const res = await sendFormData("openSalon", formData); // ✅ use context
+        console.log("Salon opened:", res.data);
+        setSalonStatus(status);
       } else if (status === "closed") {
         formData = {
           closeTime: new Date().toISOString(),
           status: "closed",
         };
 
-        const res = await axios.put("http://localhost:5500/api/sessions", formData);
+        const res = await sendFormData("closeSalon", formData); // ✅ use context
         console.log("Salon closed:", res.data);
+        setSalonStatus(status);
       }
-
-      setSalonStatus(status); 
     } catch (err) {
       console.error("Error handling salon session:", err.response?.data || err.message);
     }
   };
 
-
   const closeModal = () => setModalType(null);
 
   const handleService = async (formData) => {
     try {
-      await axios.post('http://localhost:5500/api/services', formData);
+      await sendFormData("createService", formData); // ✅ use context
       closeModal();
     } catch (err) {
-      console.error('Failed to submit service', err);
+      console.error("Failed to submit service", err);
     }
   };
 
   const handleExpense = async (formData) => {
     try {
-      await axios.post('http://localhost:5500/api/expenses', formData);
+      await sendFormData("createExpense", formData); // ✅ you might need to add case in DataContext
       closeModal();
     } catch (err) {
-      console.error('Failed to submit expense', err);
+      console.error("Failed to submit expense", err);
     }
   };
 
   const handleAdvance = async (formData) => {
     try {
-      await axios.post('http://localhost:5500/api/advances', formData);
+      await sendFormData("createAdvance", formData); // ✅ use context
       closeModal();
     } catch (err) {
-      console.error('Failed to submit advance', err);
+      console.error("Failed to submit advance", err);
     }
   };
 
   const handleClocking = async (type, formData) => {
-  try {
-    if (type === "clockin") {
-      const res = await axios.post("http://localhost:5500/api/clockings", formData);
-      console.log("Clock in success:", res.data);
-
-    } else if (type === "clockout") {
-      const res = await axios.put("http://localhost:5500/api/clockings", formData);
-      console.log("Clock out success:", res.data);
-
-    } else {
-      console.error("Invalid clocking type");
-    }
-  } catch (err) {
-    console.error("Error handling clocking:", err.response?.data || err.message);
-  }
-};
-
-    useEffect(() => {
-    async function fetchSalonStatus() {
-      try {
-        const res = await axios.get("http://localhost:5500/api/sessions/status"); 
-        console.log("this is the fetched salon status in the frontend", res.data[0].status)
-        setSalonStatus(res.data[0].status); // e.g. "open" or "closed"
-      } catch (err) {
-        console.error("Failed to fetch salon status", err);
+    try {
+      if (type === "clockin") {
+        const res = await sendFormData("createClocking", formData); // ✅ use context
+        console.log("Clock in success:", res.data);
+      } else if (type === "clockout") {
+        const res = await sendFormData("updateClocking", formData); // ✅ add this case in DataContext
+        console.log("Clock out success:", res.data);
+      } else {
+        console.error("Invalid clocking type");
       }
+    } catch (err) {
+      console.error("Error handling clocking:", err.response?.data || err.message);
     }
+  };
 
-    fetchSalonStatus();
-  }, []);
+
+ useEffect(() => {
+    const fetchStatus = async () => {
+      if (sessions && sessions.length > 0) {
+        const todaySession = sessions[0];
+        console.log("Fetched salon status:", todaySession.status);
+        setSalonStatus(todaySession.status);
+      } else {
+        setSalonStatus("closed");
+      }
+    };
+
+    fetchStatus();
+  }, [sessions]); 
 
   return (
     <div className="space-y-10">
