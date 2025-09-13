@@ -24,7 +24,7 @@ export default function Dashboard() {
           status: "open",
         };
 
-        const res = await sendFormData("openSalon", formData); // ✅ use context
+        const res = await sendFormData("openSalon", formData);
         console.log("Salon opened:", res.data);
         setSalonStatus(status);
       } else if (status === "closed") {

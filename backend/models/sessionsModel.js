@@ -1,38 +1,36 @@
 import db from './database.js';
 
-export const saveSalonSession = async (openTime, closeTime, status) => {
+export const saveSalonSession = async (status) => {
   const query = `
     INSERT INTO salon_sessions (
       open_time,
       close_time,
       status
-    ) VALUES ($1, $2, $3)
-    RETURNING *
+    )
+    VALUES (NOW(), NULL, $1)
+    RETURNING *;
   `;
 
-  const values = [
-    openTime,
-    closeTime,       
-    status      
-  ];
-
+  const values = [status];
   const { rows } = await db.query(query, values);
-  return rows[0]; 
+  return rows[0];
 };
 
 
-export const updateSalonSession = async (closeTime, status) => {
+
+
+export const updateSalonSession = async (status) => {
   const query = `
     UPDATE salon_sessions
-    SET close_time = $1,
-        status = $2,
+    SET close_time = NOW(),
+        status = $1,
         updated_at = NOW()
     WHERE status = 'open'
       AND close_time IS NULL
     RETURNING *
   `;
 
-  const values = [closeTime, status,];
+  const values = [status,];
 
   const { rows } = await db.query(query, values);
   return rows[0]; 
@@ -42,12 +40,22 @@ export const updateSalonSession = async (closeTime, status) => {
 export const fetchTodaySalonSession = async () => {
   try {
     const results = await db.query(
-      `SELECT * FROM salon_sessions 
-       WHERE DATE(open_time) = CURRENT_DATE 
-         AND close_time IS NULL 
-         AND status = 'open'
-       ORDER BY open_time DESC
-       LIMIT 1`
+      `SELECT 
+  s.id,
+  s.status,
+  s.open_time AT TIME ZONE 'UTC' AS open_time,
+  s.close_time AT TIME ZONE 'UTC' AS close_time,
+  s.created_at AT TIME ZONE 'UTC' AS created_at,
+  s.updated_at AT TIME ZONE 'UTC' AS updated_at,
+  NOW() AS server_now
+FROM salon_sessions s
+WHERE DATE(open_time) = CURRENT_DATE
+  AND close_time IS NULL
+  AND status = 'open'
+ORDER BY open_time DESC
+LIMIT 1;
+
+`
     );
 
     return results.rows || null; // return the open session or null

@@ -2,11 +2,11 @@ import { saveSalonSession, updateSalonSession, fetchTodaySalonSession } from '..
 
 export const openSalonSession = async (req, res) => {
   try {
-    const { openTime, closeTime, status } = req.body;
+    const {closeTime, status } = req.body;
 
-    console.log("Opening salon session:", openTime, closeTime, status);
+    console.log("Opening salon session:",closeTime, status);
 
-    await saveSalonSession(openTime, closeTime, status);
+    await saveSalonSession(status);
 
     res.status(201).json({
       message: "Salon session opened successfully",
@@ -20,11 +20,11 @@ export const openSalonSession = async (req, res) => {
 
 export const closeSalonSession = async (req, res) => {
   try {
-    const { closeTime, status } = req.body;
+    const { status } = req.body;
 
-    console.log("Closing salon session:",closeTime, status);
+    console.log("Closing salon session:", status);
 
-    await updateSalonSession(closeTime, status);
+    await updateSalonSession(status);
 
     res.status(200).json({
       message: "Salon session closed successfully",
