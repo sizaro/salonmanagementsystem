@@ -79,58 +79,76 @@ return (
       </p>
     </section>
   {/* Services Table */} {/* Services Table */} 
-  <section className="bg-white shadow-md rounded-lg p-4 mb-6">
-    <h2 className="text-xl font-semibold text-blue-700 mb-4">Services Rendered</h2> 
-    {/* Make table horizontally scrollable on small screens */} 
-    <div className="overflow-x-auto w-full" > 
-      <table className="w-full min-w-max border border-gray-300 text-sm"> 
-        <thead className="bg-blue-700 text-white"> <tr> 
-          <th className="p-2 text-left">No.</th> 
-          <th className="p-2 text-left">Name</th> 
-          <th className="p-2 text-left">Service Amount</th> 
-          <th className="p-2 text-left">Salon Amount</th> 
-          <th className="p-2 text-left">Barber</th> 
-          <th className="p-2 text-left">Barber Amount</th> 
-          <th className="p-2 text-left">Aesthetician</th> 
-          <th className="p-2 text-left">Aesthetician Amount</th> 
-          <th className="p-2 text-left">Scrubber Aesthetician</th> 
-          <th className="p-2 text-left">Scrubber Amount</th> 
-          <th className="p-2 text-left">Black Shampoo Aesthetician</th>
-          <th className="p-2 text-left">Black Shampoo Aesthetician Amount</th> 
-          <th className="p-2 text-left">Black Shampoo Amount</th> 
-          <th className="p-2 text-left">Super Black Aestheticain</th>
-          <th className="p-2 text-left">Super Black Aesthetician Amount</th>
-          <th className="p-2 text-left">Super Black Amount</th> 
-          <th className="p-2 text-left">Black Mask Aesthetician</th> 
-          <th className="p-2 text-left">Black Mask Aesthetician Amount</th> 
-          <th className="p-2 text-left">Black Mask Amount</th> 
-          <th className="p-2 text-left">Time of Service</th> 
-          </tr> 
-          </thead> 
-          <tbody> {services.map((service, index) => ( <tr key={service.id} className="border-b">
-            <td className="p-2">{index + 1}</td>
-            <td className="p-2">{service.name}</td> 
-            <td className="p-2">{service.service_amount}</td> 
-            <td className="p-2">{service.salon_amount}</td> 
-            <td className="p-2">{service.barber}</td> 
-            <td className="p-2">{service.barber_amount}</td> 
-            <td className="p-2">{service.barber_assistant || "-"}</td> 
-            <td className="p-2">{service.barber_assistant_amount}</td> 
-            <td className="p-2">{service.scrubber_assistant || "-"}</td> 
-            <td className="p-2">{service.scrubber_assistant_amount}</td> 
-            <td className="p-2">{service.black_shampoo_assistant || "-"}</td> 
-            <td className="p-2">{service.black_shampoo_assistant_amount || "-"}</td>
-            <td className="p-2">{service.black_shampoo_amount}</td> 
-            <td className="p-2">{service.super_black_assistant || "-"}</td> 
-            <td className="p-2">{service.super_black_assistant_amount || "-"}</td> 
-            <td className="p-2">{service.super_black_amount}</td> 
-            <td className="p-2">{service.black_mask_assistant || "-"}</td>
-            <td className="p-2">{service.black_mask_assistant_amount || "-"}</td> 
-            <td className="p-2">{service.black_mask_amount}</td> 
-            <td className="p-2"> {new Date(service.service_timestamp).toLocaleString()} </td> 
-            </tr> ))} </tbody> </table> 
-            </div> 
-            </section> 
+    <section className="bg-white shadow-md rounded-lg p-4 mb-6">
+      <h2 className="text-xl font-semibold text-blue-700 mb-4">
+        Services Rendered
+      </h2>
+
+      {/* Make table horizontally scrollable on small screens */}
+      <div className="overflow-x-auto w-full">
+        <table className="w-full min-w-max border border-gray-300 text-sm">
+          <thead className="bg-blue-700 text-gray-100">
+            <tr>
+              <th className="p-2 text-left">No.</th>
+              <th className="p-2 text-left">Name</th>
+              <th className="p-2 text-left">Service Amount</th>
+              <th className="p-2 text-left">Salon Amount</th>
+              <th className="p-2 text-left">Barber</th>
+              <th className="p-2 text-left">Barber Amount</th>
+              <th className="p-2 text-left">Aesthetician</th>
+              <th className="p-2 text-left">Aesthetician Amount</th>
+              <th className="p-2 text-left">Scrubber Aesthetician</th>
+              <th className="p-2 text-left">Scrubber Amount</th>
+              <th className="p-2 text-left">Black Shampoo Aesthetician</th>
+              <th className="p-2 text-left">Black Shampoo Aesthetician Amount</th>
+              <th className="p-2 text-left">Black Shampoo Amount</th>
+              <th className="p-2 text-left">Super Black Aesthetician</th>
+              <th className="p-2 text-left">Super Black Aesthetician Amount</th>
+              <th className="p-2 text-left">Super Black Amount</th>
+              <th className="p-2 text-left">Black Mask Aesthetician</th>
+              <th className="p-2 text-left">Black Mask Aesthetician Amount</th>
+              <th className="p-2 text-left">Black Mask Amount</th>
+              <th className="p-2 text-left">Time of Service</th>
+            </tr>
+          </thead>
+
+          <tbody className="text-gray-800">
+            {services.map((service, index) => (
+              <tr
+                key={service.id}
+                className="border-b border-gray-300 even:bg-gray-50 hover:bg-gray-100"
+              >
+                <td className="p-2">{index + 1}</td>
+                <td className="p-2">{service.name}</td>
+                <td className="p-2">{service.service_amount}</td>
+                <td className="p-2">{service.salon_amount}</td>
+                <td className="p-2">{service.barber}</td>
+                <td className="p-2">{service.barber_amount}</td>
+                <td className="p-2">{service.barber_assistant || "-"}</td>
+                <td className="p-2">{service.barber_assistant_amount}</td>
+                <td className="p-2">{service.scrubber_assistant || "-"}</td>
+                <td className="p-2">{service.scrubber_assistant_amount}</td>
+                <td className="p-2">{service.black_shampoo_assistant || "-"}</td>
+                <td className="p-2">
+                  {service.black_shampoo_assistant_amount || "-"}
+                </td>
+                <td className="p-2">{service.black_shampoo_amount}</td>
+                <td className="p-2">{service.super_black_assistant || "-"}</td>
+                <td className="p-2">{service.super_black_assistant_amount || "-"}</td>
+                <td className="p-2">{service.super_black_amount}</td>
+                <td className="p-2">{service.black_mask_assistant || "-"}</td>
+                <td className="p-2">{service.black_mask_assistant_amount || "-"}</td>
+                <td className="p-2">{service.black_mask_amount}</td>
+                <td className="p-2">
+                  {new Date(service.service_timestamp).toLocaleString()}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
   </div> ); }; 
 
 export default IncomeDailyReport;

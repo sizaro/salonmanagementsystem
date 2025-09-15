@@ -19,15 +19,15 @@ export const DataProvider = ({ children }) => {
     try {
       const [servicesRes, employeesRes, advancesRes, clockingsRes] = await Promise.all([
         axios.get(`${API_URL}/services`),
-        axios.get(`${API_URL}/employees`),
-        axios.get(`${API_URL}/advances`),
-        axios.get(`${API_URL}/clockings`),
+        // axios.get(`${API_URL}/employees`),
+        // axios.get(`${API_URL}/advances`),
+        // axios.get(`${API_URL}/clockings`),
       ]);
 
       setServices(servicesRes.data);
-      setEmployees(employeesRes.data);
-      setAdvances(advancesRes.data);
-      setClockings(clockingsRes.data);
+      // setEmployees(employeesRes.data);
+      // setAdvances(advancesRes.data);
+      // setClockings(clockingsRes.data);
     } catch (err) {
       console.error("Error fetching static data:", err);
     }
