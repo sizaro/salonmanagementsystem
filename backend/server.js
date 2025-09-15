@@ -29,10 +29,5 @@ app.use('/api/clockings', clockingsRoutes);
 app.use('/api/sessions', sessionsRoutes);
 
 
-// Catch-all for React SPA (Express 5 compatible)
-app.get('/{*splat}', (req, res) => {
-  res.sendFile(path.resolve(frontendPath, 'index.html'));
-});
-
 const PORT = process.env.PORT || 5500;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
