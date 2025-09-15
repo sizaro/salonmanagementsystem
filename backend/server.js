@@ -28,10 +28,6 @@ app.use('/api/advances', advancesRoutes);
 app.use('/api/clockings', clockingsRoutes);
 app.use('/api/sessions', sessionsRoutes);
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const frontendPath = path.join(__dirname, '../frontend/dist');
-app.use(express.static(frontendPath));
 
 // Catch-all for React SPA (Express 5 compatible)
 app.get('/{*splat}', (req, res) => {
