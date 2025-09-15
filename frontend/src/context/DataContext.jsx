@@ -11,7 +11,7 @@ export const DataProvider = ({ children }) => {
   const [sessions, setSessions] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5500/api";
+  const API_URL = import.meta.env.VITE_API_URL;
 
   // Fetch non-session data once or on mutation
   const fetchAllData = async () => {
