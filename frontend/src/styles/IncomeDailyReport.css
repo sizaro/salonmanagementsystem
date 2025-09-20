@@ -26,7 +26,6 @@
   align-items: center;
   flex-direction: column;
   width: 100%;
-  overflow-x: auto; /* Horizontal scroll */
 }
 
 .table-container {
@@ -35,13 +34,13 @@
   width: 100%;
   max-height: 60vh; /* limit vertical height */
   overflow-y: auto; /* vertical scroll */
+  overflow-x: auto; /* vertical scroll */
   border: 1px solid #ccc;
   border-radius: 4px;
 }
 
 /* ===== Table Styles ===== */
 .styled-table {
-  border-collapse: collapse;
   width: 100%;
   font-size: 0.9rem;
   color: #333;
@@ -52,7 +51,6 @@
 .styled-table thead {
   background-color: #1d4ed8;
   color: #ffffff;
-  position: sticky;
   top: 0;
   z-index: 10;
 }
@@ -60,14 +58,12 @@
 .styled-table th {
   text-align: left;
   padding: 8px;
-  white-space: nowrap; /* prevent headers from wrapping */
 }
 
 /* Table Body */
 .styled-table td {
   padding: 8px;
   border-bottom: 1px solid #ddd;
-  white-space: nowrap; /* keeps data in one line */
 }
 
 .styled-table tbody tr:nth-child(even) {

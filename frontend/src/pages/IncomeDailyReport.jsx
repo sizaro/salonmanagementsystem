@@ -122,67 +122,73 @@ return (
   </section>
 
     {/* Services Table Section */}
-    <section id="services-section" className="section-container bg-white shadow-md rounded-lg p-4 mb-6 w-full max-w-4xl">
-      <h2 className="section-title">Services Rendered</h2>
+    <section className="w-full max-w-screen-xl mx-auto bg-white shadow-md rounded-lg p-4">
+  <h2 className="text-xl font-semibold text-blue-700 mb-4">Services Rendered</h2>
 
-      {/* Table Scroll Wrapper */}
-      <div className="table-wrapper bg-white shadow-md rounded-lg p-4 mb-6 w-full max-w-4xl">
-        <div className="table-container bg-white shadow-md rounded-lg p-4 mb-6 w-full max-w-4xl">
-          <table id="services-table" className="styled-table bg-white shadow-md rounded-lg p-4 mb-6 w-full max-w-4xl">
-            <thead>
-              <tr>
-                <th>No.</th>
-                <th>Name</th>
-                <th>Service Amount</th>
-                <th>Salon Amount</th>
-                <th>Barber</th>
-                <th>Barber Amount</th>
-                <th>Aesthetician</th>
-                <th>Aesthetician Amount</th>
-                <th>Scrub Aesthetician</th>
-                <th>Scrubber Amount</th>
-                <th>Black Shampoo Aesthetician</th>
-                <th>Black Shampoo Aesthetician Amount</th>
-                <th>Black Shampoo Amount</th>
-                <th>Super Black Aesthetician</th>
-                <th>Super Black Aesthetician Amount</th>
-                <th>Super Black Amount</th>
-                <th>Black Mask Aesthetician</th>
-                <th>Black Mask Aesthetician Amount</th>
-                <th>Black Mask Amount</th>
-                <th>Time of Service</th>
-              </tr>
-            </thead>
-            <tbody>
-              {services.map((service, index) => (
-                <tr key={service.id}>
-                  <td>{index + 1}</td>
-                  <td>{service.name}</td>
-                  <td>{service.service_amount}</td>
-                  <td>{service.salon_amount}</td>
-                  <td>{service.barber}</td>
-                  <td>{service.barber_amount}</td>
-                  <td>{service.barber_assistant || "-"}</td>
-                  <td>{service.barber_assistant_amount}</td>
-                  <td>{service.scrubber_assistant || "-"}</td>
-                  <td>{service.scrubber_assistant_amount}</td>
-                  <td>{service.black_shampoo_assistant || "-"}</td>
-                  <td>{service.black_shampoo_assistant_amount || "-"}</td>
-                  <td>{service.black_shampoo_amount}</td>
-                  <td>{service.super_black_assistant || "-"}</td>
-                  <td>{service.super_black_assistant_amount || "-"}</td>
-                  <td>{service.super_black_amount}</td>
-                  <td>{service.black_mask_assistant || "-"}</td>
-                  <td>{service.black_mask_assistant_amount || "-"}</td>
-                  <td>{service.black_mask_amount}</td>
-                  <td>{new Date(service.service_timestamp).toLocaleString()}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </section>
+  {/* Table Scroll Wrapper */}
+  <div className="overflow-x-auto">
+    <div className="max-h-[50vh] overflow-y-auto border border-gray-300 rounded">
+      <table className="min-w-full border-collapse text-sm">
+        <thead className="bg-blue-700 text-white sticky top-0 z-10">
+          <tr>
+            <th className="px-3 py-2 text-left">No.</th>
+            <th className="px-3 py-2 text-left">Name</th>
+            <th className="px-3 py-2 text-left">Service Amount</th>
+            <th className="px-3 py-2 text-left">Salon Amount</th>
+            <th className="px-3 py-2 text-left">Barber</th>
+            <th className="px-3 py-2 text-left">Barber Amount</th>
+            <th className="px-3 py-2 text-left">Aesthetician</th>
+            <th className="px-3 py-2 text-left">Aesthetician Amount</th>
+            <th className="px-3 py-2 text-left">Scrub Aesthetician</th>
+            <th className="px-3 py-2 text-left">Scrubber Amount</th>
+            <th className="px-3 py-2 text-left">Black Shampoo Aesthetician</th>
+            <th className="px-3 py-2 text-left">Black Shampoo Aesthetician Amount</th>
+            <th className="px-3 py-2 text-left">Black Shampoo Amount</th>
+            <th className="px-3 py-2 text-left">Super Black Aesthetician</th>
+            <th className="px-3 py-2 text-left">Super Black Aesthetician Amount</th>
+            <th className="px-3 py-2 text-left">Super Black Amount</th>
+            <th className="px-3 py-2 text-left">Black Mask Aesthetician</th>
+            <th className="px-3 py-2 text-left">Black Mask Aesthetician Amount</th>
+            <th className="px-3 py-2 text-left">Black Mask Amount</th>
+            <th className="px-3 py-2 text-left">Time of Service</th>
+          </tr>
+        </thead>
+        <tbody>
+          {services.map((service, index) => (
+            <tr
+              key={service.id}
+              className={index % 2 === 0 ? "bg-gray-50" : "bg-white"}
+            >
+              <td className="px-3 py-2">{index + 1}</td>
+              <td className="px-3 py-2">{service.name}</td>
+              <td className="px-3 py-2">{service.service_amount}</td>
+              <td className="px-3 py-2">{service.salon_amount}</td>
+              <td className="px-3 py-2">{service.barber}</td>
+              <td className="px-3 py-2">{service.barber_amount}</td>
+              <td className="px-3 py-2">{service.barber_assistant || "-"}</td>
+              <td className="px-3 py-2">{service.barber_assistant_amount}</td>
+              <td className="px-3 py-2">{service.scrubber_assistant || "-"}</td>
+              <td className="px-3 py-2">{service.scrubber_assistant_amount}</td>
+              <td className="px-3 py-2">{service.black_shampoo_assistant || "-"}</td>
+              <td className="px-3 py-2">{service.black_shampoo_assistant_amount || "-"}</td>
+              <td className="px-3 py-2">{service.black_shampoo_amount}</td>
+              <td className="px-3 py-2">{service.super_black_assistant || "-"}</td>
+              <td className="px-3 py-2">{service.super_black_assistant_amount || "-"}</td>
+              <td className="px-3 py-2">{service.super_black_amount}</td>
+              <td className="px-3 py-2">{service.black_mask_assistant || "-"}</td>
+              <td className="px-3 py-2">{service.black_mask_assistant_amount || "-"}</td>
+              <td className="px-3 py-2">{service.black_mask_amount}</td>
+              <td className="px-3 py-2">
+                {new Date(service.service_timestamp).toLocaleString()}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
 
 </div>
 
