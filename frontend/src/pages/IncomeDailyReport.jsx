@@ -126,8 +126,8 @@ return (
       <h2 className="section-title">Services Rendered</h2>
 
       {/* Table Scroll Wrapper */}
-      <div className="table-wrapper bg-white shadow-md rounded-lg p-4 mb-6 w-full max-w-1xl">
-        <div className="table-container bg-white shadow-md rounded-lg p-4 mb-6 w-full max-w-1xl">
+      <div className="table-wrapper bg-white shadow-md rounded-lg p-4 mb-6 w-full max-w-4xl">
+        <div className="table-container bg-white shadow-md rounded-lg p-4 mb-6 w-full max-w-4xl">
           <table id="services-table" className="styled-table bg-white shadow-md rounded-lg p-4 mb-6 w-full max-w-4xl">
             <thead>
               <tr>
