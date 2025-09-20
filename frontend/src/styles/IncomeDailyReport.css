@@ -77,31 +77,3 @@
 .styled-table tbody tr:hover {
   background-color: #f1f1f1;
 }
-
-
-
-
-/* For small screens */
-@media (max-width: 768px) {
-  .styled-table {
-    font-size: 0.75rem; /* make text smaller */
-    min-width: 200px;   /* shrink minimum width */
-  }
-
-  .table-container {
-    max-height: 50vh; /* adjust vertical scroll */
-  }
-
-  .styled-table th,
-  .styled-table td {
-    padding: 4px; /* tighter padding */
-  }
-}
-
-/* For extra small screens */
-@media (max-width: 480px) {
-  .styled-table {
-    font-size: 0.7rem;
-    min-width: 150px; /* even smaller min width */
-  }
-}
