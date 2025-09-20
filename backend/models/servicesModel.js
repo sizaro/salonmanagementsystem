@@ -73,7 +73,12 @@ export const saveService = async ({
 
 
 export const fetchAllServices = async () => {
-  const query = `SELECT * FROM services ORDER BY id DESC;`;
+  const query = `SELECT 
+  s.*,
+  (s.service_timestamp AT TIME ZONE 'UTC') AS "service time"
+FROM services s
+WHERE (s.service_timestamp AT TIME ZONE 'Africa/Kampala')::date = CURRENT_DATE;
+`  
   const result = await db.query(query);
   console.log("this is what the data from the database for all services", result.rows)
   return result.rows

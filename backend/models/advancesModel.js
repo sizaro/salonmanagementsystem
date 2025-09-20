@@ -1,23 +1,31 @@
 import db from './database.js';
 
 export const saveAdvance = async ({
-  employee_id,
+  employee_name,
   amount,
   description
 }) => {
   const query = `
     INSERT INTO advances (
-      employee_id,
       amount,
-      description
-    ) VALUES ($1, $2, $3)
+      description,
+      created_at,
+      employee_name
+    ) VALUES ($1, $2,NOW(), $3)
   `;
 
   const values = [
-    employee_id,
     amount,
-    description
+    description,
+    employee_name,
   ];
 
   await db.query(query, values);
+};
+
+export const fetchAllAdvances = async () => {
+  const query = `SELECT * FROM advances;`;
+  const result = await db.query(query);
+  console.log("this is what the data from the database for all advances", result.rows)
+  return result.rows
 };

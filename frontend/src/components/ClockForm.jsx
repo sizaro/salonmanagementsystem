@@ -20,8 +20,6 @@ export default function ClockForm({ onSubmit, onClose }) {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [formData, setFormData] = useState({
     employeeName: "",
-    clockIn: null,
-    clockOut: null,
   });
 
   useEffect(() => {
@@ -33,27 +31,14 @@ export default function ClockForm({ onSubmit, onClose }) {
     setFormData((prev) => ({ ...prev, employeeName: e.target.value }));
   };
 
-  const handleClockIn = () => {
-  const updatedForm = {
-    ...formData,
-    clockIn: new Date().toISOString(),
-    clockOut: null, 
-  };
-
-  setFormData(updatedForm);  
-  onSubmit("clockin", updatedForm); 
+  const handleClockIn = () => { 
+  onSubmit("clockin", formData); 
   onClose();             
 };
 
 const handleClockOut = () => {
-  const updatedForm = {
-    ...formData,
-    clockOut: new Date().toISOString(),
-
-  };
-
   setFormData(updatedForm);  
-  onSubmit("clockout", updatedForm); 
+  onSubmit("clockout", formData); 
   onClose();       
 };
 

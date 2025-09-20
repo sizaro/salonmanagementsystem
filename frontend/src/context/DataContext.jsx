@@ -6,6 +6,7 @@ const DataContext = createContext();
 export const DataProvider = ({ children }) => {
   const [services, setServices] = useState([]);
   const [employees, setEmployees] = useState([]);
+  const [expenses, setExpenses] = useState([]);
   const [advances, setAdvances] = useState([]);
   const [clockings, setClockings] = useState([]);
   const [sessions, setSessions] = useState([]);
@@ -17,17 +18,19 @@ export const DataProvider = ({ children }) => {
   // Fetch non-session data once or on mutation
   const fetchAllData = async () => {
     try {
-      const [servicesRes, employeesRes, advancesRes, clockingsRes] = await Promise.all([
+      const [servicesRes,  advancesRes, expensesRes, clockingsRes, employeeRes] = await Promise.all([
         axios.get(`${API_URL}/services`),
-        // axios.get(`${API_URL}/employees`),
-        // axios.get(`${API_URL}/advances`),
-        // axios.get(`${API_URL}/clockings`),
+        axios.get(`${API_URL}/advances`),
+        axios.get(`${API_URL}/expenses`),
+        axios.get(`${API_URL}/clockings`),
+        axios.get(`${API_URL}/employees`),
       ]);
 
       setServices(servicesRes.data);
-      // setEmployees(employeesRes.data);
-      // setAdvances(advancesRes.data);
-      // setClockings(clockingsRes.data);
+      setAdvances(advancesRes.data);
+      setExpenses(expensesRes.data);
+      setClockings(clockingsRes.data);
+      setEmployees(employeeRes.data)
     } catch (err) {
       console.error("Error fetching static data:", err);
     }
@@ -51,19 +54,23 @@ export const DataProvider = ({ children }) => {
       switch (formIdentifier) {
         case "createEmployee":
           res = await axios.post(`${API_URL}/employees`, formData);
-          await fetchStaticData();
+          await fetchAllData();
           break;
         case "createService":
           res = await axios.post(`${API_URL}/services`, formData);
-          await fetchStaticData();
+          await fetchAllData();
           break;
         case "createAdvance":
           res = await axios.post(`${API_URL}/advances`, formData);
-          await fetchStaticData();
+          await fetchAllData();
+          break;
+        case "createExpense":
+          res = await axios.post(`${API_URL}/expenses`, formData);
+          await fetchAllData();
           break;
         case "createClocking":
           res = await axios.post(`${API_URL}/clockings`, formData);
-          await fetchStaticData();
+          await fetchAllData();
           break;
         case "openSalon":
         case "closeSalon":
@@ -101,6 +108,7 @@ export const DataProvider = ({ children }) => {
       value={{
         services,
         employees,
+        expenses,
         advances,
         clockings,
         sessions,

@@ -44,7 +44,7 @@ export default function Dashboard() {
 
   const closeModal = () => setModalType(null);
 
-  const handleService = async (formData) => {
+  const createService = async (formData) => {
     try {
       await sendFormData("createService", formData); // ✅ use context
       closeModal();
@@ -53,18 +53,18 @@ export default function Dashboard() {
     }
   };
 
-  const handleExpense = async (formData) => {
+  const createExpense = async (formData) => {
     try {
-      await sendFormData("createExpense", formData); // ✅ you might need to add case in DataContext
+      await sendFormData("createExpense", formData); 
       closeModal();
     } catch (err) {
       console.error("Failed to submit expense", err);
     }
   };
 
-  const handleAdvance = async (formData) => {
+  const createAdvance = async (formData) => {
     try {
-      await sendFormData("createAdvance", formData); // ✅ use context
+      await sendFormData("createAdvance", formData);
       closeModal();
     } catch (err) {
       console.error("Failed to submit advance", err);
@@ -74,10 +74,10 @@ export default function Dashboard() {
   const handleClocking = async (type, formData) => {
     try {
       if (type === "clockin") {
-        const res = await sendFormData("createClocking", formData); // ✅ use context
+        const res = await sendFormData("createClocking", formData);
         console.log("Clock in success:", res.data);
       } else if (type === "clockout") {
-        const res = await sendFormData("updateClocking", formData); // ✅ add this case in DataContext
+        const res = await sendFormData("updateClocking", formData);
         console.log("Clock out success:", res.data);
       } else {
         console.error("Invalid clocking type");
@@ -118,9 +118,9 @@ export default function Dashboard() {
       <Button onClick={() => setModalType('clocking')}>Employee Clocking</Button>
 
       <Modal isOpen={modalType !== null} onClose={closeModal}>
-        {modalType === 'service' && <ServiceForm onSubmit={handleService} onClose={closeModal} />}
-        {modalType === 'expense' && <ExpenseForm onSubmit={handleExpense} onClose={closeModal} />}
-        {modalType === 'advance' && <AdvanceForm onSubmit={handleAdvance} onClose={closeModal} />}
+        {modalType === 'service' && <ServiceForm onSubmit={createService} onClose={closeModal} />}
+        {modalType === 'expense' && <ExpenseForm onSubmit={createExpense} onClose={closeModal} />}
+        {modalType === 'advance' && <AdvanceForm onSubmit={createAdvance} onClose={closeModal} />}
         {modalType === 'clocking' && <ClockForm onSubmit={handleClocking} onClose={closeModal} />}
       </Modal>
     </div>

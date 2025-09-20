@@ -1,7 +1,8 @@
 import express from 'express'
 const router = express.Router();
-import {createAdvance }from '../controllers/advancesController.js';
+import {createAdvance, getAllAdvances }from '../controllers/advancesController.js';
 
 router.post('/', createAdvance);
+router.get('/', getAllAdvances)
 
 export default router

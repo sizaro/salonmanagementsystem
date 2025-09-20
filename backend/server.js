@@ -10,6 +10,7 @@ import expensesRoutes from './routes/expensesRoutes.js';
 import advancesRoutes from './routes/advancesRoutes.js';
 import clockingsRoutes from './routes/clockingsRoutes.js';
 import sessionsRoutes from './routes/sessionsRoutes.js';
+import employeesRoutes from './routes/employeesRoutes.js';
 
 const app = express();
 app.use(cors({
@@ -27,6 +28,7 @@ app.use('/api/expenses', expensesRoutes);
 app.use('/api/advances', advancesRoutes);
 app.use('/api/clockings', clockingsRoutes);
 app.use('/api/sessions', sessionsRoutes);
+app.use('/api/employees', employeesRoutes);
 
 
 const PORT = process.env.PORT || 5500;

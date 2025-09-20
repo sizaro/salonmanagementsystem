@@ -18,3 +18,11 @@ export const saveExpense = async ({
 
   await db.query(query, values);
 };
+
+
+export const fetchAllExpenses = async () => {
+  const query = `SELECT * FROM expenses;`;
+  const result = await db.query(query);
+  console.log("this is what the data from the database for all expenses", result.rows)
+  return result.rows
+};
