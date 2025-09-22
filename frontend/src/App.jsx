@@ -6,9 +6,9 @@ import ExpensesDailyReport from './pages/ExpensesDailyReport';
 import WorkDailyReport from './pages/WorkDailyReport';
 function App() {
   return (
-    <div className="flex">
+    <div className="flex overflow-x-hidden">
       <Sidebar />
-      <main className="flex-1 p-6 pt-18 md:pt-6 md:ml-64">
+      <main className="flex-1 p-6 pt-18 md:pt-6 md:ml-64 overflow-x-hidden">
         <Routes>
           <Route path="/" element={<Dashboard />} />
           {/* Placeholder routes */}
