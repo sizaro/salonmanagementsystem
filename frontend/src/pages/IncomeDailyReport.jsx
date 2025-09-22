@@ -98,7 +98,7 @@ useEffect(() => {
 if (!session) return <p>Salon not open today yet</p>;
 
 return (
-    <div className="income-page max-w-4xl mx-auto p-4" >
+    <div className="income-page max-w-4xl mx-auto p-4 overflow-y-hidden" >
   <h1 className="text-3xl font-bold text-center mb-6 text-gray-800 break-words max-w-full">
     {reportDate} Daily Income Report
   </h1>
@@ -126,8 +126,8 @@ return (
   <h2 className="text-xl font-semibold text-blue-700 mb-4">Services Rendered</h2>
 
   {/* Table Scroll Wrapper */}
-  <div className="overflow-x-auto">
-    <div className="max-h-[50vh] overflow-y-auto border border-gray-300 rounded">
+  <div className=" w-full overflow-x-auto max-h-[60vh] overflow-y-auto border border-gray-300 rounded">
+    <div>
       <table className="min-w-full border-collapse text-sm">
         <thead className="bg-blue-700 text-white sticky top-0 z-10">
           <tr>
