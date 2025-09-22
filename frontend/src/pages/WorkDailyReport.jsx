@@ -1,89 +1,99 @@
-import React from 'react';
+import React, { useMemo } from "react";
+import { useData } from "../context/DataContext.jsx";
 
-const calculateSalary = (serviceBreakdown) => {
-  const total = serviceBreakdown.reduce((sum, item) => sum + item.amount, 0);
-  return total * 0.4;
-};
+export default function WorkDailyReport() {
+  const { services, employees, advances } = useData();
 
-const WorkDailyReport = () => {
-  const today = new Date();
-   const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-   const reportDate = today.toLocaleDateString('en-US', options);
+  const employeeTotals = useMemo(() => {
+  if (!services.length) return [];
+
+  return employees.map((emp) => {
+    const fullName = `${emp.first_name} ${emp.last_name}`;
+
+    // Total salary (only add the amounts for roles the employee actually worked in)
+    const totalSalary = services.reduce((sum, s) => {
+      if (s.barber === fullName) {
+        sum += parseInt(s.barber_amount) || 0;
+      }
+      if (s.barber_assistant === fullName) {
+        sum += parseInt(s.barber_assistant_amount) || 0;
+      }
+      if (s.scrubber_assistant === fullName) {
+        sum += parseInt(s.scrubber_assistant_amount) || 0;
+      }
+      if (s.black_shampoo_assistant === fullName) {
+        sum += parseInt(s.black_shampoo_assistant_amount) || 0;
+      }
+      if (s.super_black_assistant === fullName) {
+        sum += parseInt(s.super_black_assistant_amount) || 0;
+      }
+      if (s.black_mask_assistant === fullName) {
+        sum += parseInt(s.black_mask_assistant_amount) || 0;
+      }
+      return sum;
+    }, 0);
+
+    // Total advances for today
+    const totalAdvances = advances
+      .filter((a) => a.employee_name === fullName)
+      .reduce((sum, a) => sum + (parseInt(a.amount) || 0), 0);
+
+    return {
+      name: fullName,
+      totalSalary,
+      totalAdvances,
+      netSalary: totalSalary - totalAdvances,
+    };
+  });
+}, [services, advances, employees]);
 
 
-  const workers = [
-    {
-      name: 'Tagoole Nathan',
-      services: [
-        { category: 'Bridal Makeup', qty: 2, amount: 40000 },
-        { category: 'Hair Styling', qty: 2, amount: 40000 },
-      ],
-    },
-    {
-      name: 'Nyiro Robert',
-      services: [
-        { category: 'Manicure', qty: 2, amount: 40000 },
-        { category: 'Pedicure', qty: 1, amount: 20000 },
-      ],
-    },
-    {
-      name: 'Nambi Aisha',
-      services: [
-        { category: 'Hair Styling', qty: 3, amount: 60000 },
-        { category: 'Pedicure', qty: 1, amount: 20000 },
-      ],
-    },
-  ];
+  if (!services.length) {
+    return (
+      <section className="p-6">
+        <h2 className="text-xl font-bold text-center text-gray-700">
+          No Recorded Work Yet
+        </h2>
+      </section>
+    );
+  }
 
   return (
-    <div className="max-w-5xl mx-auto p-4">
-      <h1 className="text-3xl font-bold text-center mb-6 text-gray-800">Worker Daily Performance</h1>
-      <h2 className="text-lg font-medium text-center mb-4 text-gray-600">{reportDate}</h2>
+    <section className="p-6">
+      <h2 className="text-2xl font-bold mb-4 text-gray-800">
+        Workers Daily Report
+      </h2>
 
-      {workers.map((worker, index) => {
-        const totalSalary = calculateSalary(worker.services);
-        const totalContribution = worker.services.reduce((sum, s) => sum + s.amount, 0);
-
-        return (
-          <section
-            key={index}
-            className="bg-white shadow-md rounded-lg p-4 mb-6 border-l-4 border-blue-600"
-          >
-            <h3 className="text-xl font-semibold text-blue-700 mb-2">{worker.name}</h3>
-
-            <div className="overflow-x-auto">
-              <table className="w-full border border-gray-300 text-sm">
-                <thead className="bg-blue-100">
-                  <tr>
-                    <th className="p-2 text-left">#</th>
-                    <th className="p-2 text-left">Service Category</th>
-                    <th className="p-2 text-left">Qty</th>
-                    <th className="p-2 text-left">Amount (UGX)</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {worker.services.map((service, i) => (
-                    <tr key={i} className="border-b">
-                      <td className="p-2">{i + 1}</td>
-                      <td className="p-2">{service.category}</td>
-                      <td className="p-2">{service.qty}</td>
-                      <td className="p-2">{service.amount.toLocaleString()}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-
-            <div className="mt-4 flex justify-between text-sm font-medium">
-              <p>Total Contribution: <span className="text-blue-700">UGX {totalContribution.toLocaleString()}</span></p>
-              <p className="text-green-700">Daily Salary (40%): UGX {totalSalary.toLocaleString()}</p>
-            </div>
-          </section>
-        );
-      })}
-    </div>
+      <div className="overflow-x-auto overflow-y-auto max-h-[60vh] border rounded">
+        <table className="min-w-full border-collapse">
+          <thead className="bg-gray-200 sticky top-0">
+            <tr>
+              <th className="border px-4 py-2 text-left">#</th>
+              <th className="border px-4 py-2 text-left">Employee</th>
+              <th className="border px-4 py-2 text-right">Total Salary</th>
+              <th className="border px-4 py-2 text-right">Advances</th>
+              <th className="border px-4 py-2 text-right">Net Salary</th>
+            </tr>
+          </thead>
+          <tbody>
+            {employeeTotals.map((emp, idx) => (
+              <tr key={idx} className="hover:bg-gray-50">
+                <td className="border px-4 py-2">{idx + 1}</td>
+                <td className="border px-4 py-2">{emp.name}</td>
+                <td className="border px-4 py-2 text-right">
+                  {emp.totalSalary.toLocaleString()} UGX
+                </td>
+                <td className="border px-4 py-2 text-right">
+                  {emp.totalAdvances.toLocaleString()} UGX
+                </td>
+                <td className="border px-4 py-2 text-right font-semibold">
+                  {emp.netSalary.toLocaleString()} UGX
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
   );
-};
-
-export default WorkDailyReport;
-
+}
