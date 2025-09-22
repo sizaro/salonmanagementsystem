@@ -32,9 +32,9 @@ const serviceMap = {
   },
   'haircut-blackshampoo-12000': { 
     serviceAmount: 12000, 
-    salonAmount: 3500, 
+    salonAmount: 4000, 
     barberAmount: 2000,
-    barberAssistantAmount: 1500,
+    barberAssistantAmount: 1000,
     blackShampooAmount:3500,
     blackShampooAssistantAmount: 1500 
   },
