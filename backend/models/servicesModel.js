@@ -39,11 +39,12 @@ export const saveService = async ({
       super_black_amount,
       black_mask_assistant,
       black_mask_assistant_amount,
-      black_mask_amount
+      black_mask_amount,
+      service_timestamp
     ) VALUES (
       $1, $2, $3, $4, $5, $6, $7,
       $8, $9, $10, $11, $12, $13,
-      $14, $15, $16, $17, $18
+      $14, $15, $16, $17, $18, NOW()
     )
   `;
 
@@ -75,7 +76,7 @@ export const saveService = async ({
 export const fetchAllServices = async () => {
   const query = `SELECT 
   s.*,
-  (s.service_timestamp AT TIME ZONE 'UTC') AS "service time"
+  (s.service_timestamp AT TIME ZONE 'Africa/Kampala') AS "service time"
 FROM services s
 WHERE (s.service_timestamp AT TIME ZONE 'Africa/Kampala')::date = CURRENT_DATE;
 `  

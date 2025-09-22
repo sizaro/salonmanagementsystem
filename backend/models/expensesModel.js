@@ -21,7 +21,8 @@ export const saveExpense = async ({
 
 
 export const fetchAllExpenses = async () => {
-  const query = `SELECT * FROM expenses;`;
+  const query = `SELECT e.*, (e.created_at AT TIME ZONE 'Africa/Kampala') AS "created_at" FROM expenses e
+  WHERE (e.created_at AT TIME ZONE 'Africa/Kampala')::date = CURRENT_DATE;`;
   const result = await db.query(query);
   console.log("this is what the data from the database for all expenses", result.rows)
   return result.rows

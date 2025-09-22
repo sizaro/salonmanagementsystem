@@ -179,7 +179,7 @@ return (
               <td className="px-3 py-2">{service.black_mask_assistant_amount || "-"}</td>
               <td className="px-3 py-2">{service.black_mask_amount}</td>
               <td className="px-3 py-2">
-                {new Date(service.service_timestamp).toLocaleString()}
+                {formatEAT(service.service_timestamp)}
               </td>
             </tr>
           ))}

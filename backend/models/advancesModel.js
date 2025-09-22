@@ -24,7 +24,8 @@ export const saveAdvance = async ({
 };
 
 export const fetchAllAdvances = async () => {
-  const query = `SELECT * FROM advances;`;
+  const query = `SELECT a.*, (a.created_at AT TIME ZONE 'Africa/Kampala') AS "created_at" FROM advances a 
+  WHERE (a.created_at AT TIME ZONE 'Africa/Kampala')::date = CURRENT_DATE;`;
   const result = await db.query(query);
   console.log("this is what the data from the database for all advances", result.rows)
   return result.rows
