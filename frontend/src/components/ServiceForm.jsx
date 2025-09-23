@@ -174,12 +174,8 @@ const payload = {
   black_mask_amount: calculation.blackMaskAmount || 0
 };
 
-    try {
-      await onSubmit(payload);
-      onClose();
-    } catch (err) {
-      console.error('Submission error:', err);
-    }
+    onSubmit(payload);
+    onClose();
   };
 
     return (

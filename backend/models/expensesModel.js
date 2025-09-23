@@ -7,8 +7,9 @@ export const saveExpense = async ({
   const query = `
     INSERT INTO expenses (
       name,
-      amount
-    ) VALUES ($1, $2)
+      amount,
+      created_at
+    ) VALUES ($1, $2, NOW())
   `;
 
   const values = [
@@ -21,7 +22,7 @@ export const saveExpense = async ({
 
 
 export const fetchAllExpenses = async () => {
-  const query = `SELECT e.*, (e.created_at AT TIME ZONE 'Africa/Kampala') AS "created_at" FROM expenses e
+  const query = `SELECT e.*, (e.created_at AT TIME ZONE 'UTC') AS "created_at" FROM expenses e
   WHERE (e.created_at AT TIME ZONE 'Africa/Kampala')::date = CURRENT_DATE;`;
   const result = await db.query(query);
   console.log("this is what the data from the database for all expenses", result.rows)

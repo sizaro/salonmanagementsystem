@@ -48,12 +48,14 @@ const calculateTotals = (services, expenses, advances) => {
   const netEmployeeSalary = employeesSalary - totalAdvances
 
   // Net Income
-  const netIncome = grossIncome - (totalExpenses + employeesSalary - totalAdvances);
+  const netIncome = grossIncome - (totalExpenses + netEmployeeSalary);
 
-  return { grossIncome, employeesSalary, totalExpenses, totalAdvances, netEmployeeSalary, netIncome };
+  const cashAtHand = netIncome + netEmployeeSalary
+ 
+  return { grossIncome, employeesSalary, totalExpenses, totalAdvances, netEmployeeSalary, netIncome, cashAtHand };
 };
 
-const { grossIncome, employeesSalary, totalExpenses, totalAdvances, netEmployeeSalary, netIncome } =
+const { grossIncome, employeesSalary, totalExpenses, totalAdvances, netEmployeeSalary, netIncome, cashAtHand } =
   calculateTotals(services, expenses, advances);
 
 // Format any UTC date string to EAT
@@ -119,6 +121,7 @@ return (
       <p><span className="font-medium">Advances:</span> {totalAdvances.toLocaleString()} UGX</p>
       <p><span className="font-medium">Net Employees Salary:</span> {netEmployeeSalary.toLocaleString()} UGX</p>
       <p><span className="font-medium">salon Net Income:</span> {netIncome.toLocaleString()} UGX</p>
+      <p><span className="font-medium">Total Cash Available:</span> {cashAtHand.toLocaleString()} UGX</p>
   </section>
 
     {/* Services Table Section */}
