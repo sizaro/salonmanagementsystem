@@ -14,23 +14,23 @@ export const DataProvider = ({ children }) => {
 
   const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5500/api";
 
-
   // Fetch non-session data once or on mutation
   const fetchAllData = async () => {
     try {
-      const [servicesRes,  advancesRes, expensesRes, clockingsRes, employeeRes] = await Promise.all([
-        axios.get(`${API_URL}/services`),
-        axios.get(`${API_URL}/advances`),
-        axios.get(`${API_URL}/expenses`),
-        axios.get(`${API_URL}/clockings`),
-        axios.get(`${API_URL}/employees`),
-      ]);
+      const [servicesRes, advancesRes, expensesRes, clockingsRes, employeeRes] =
+        await Promise.all([
+          axios.get(`${API_URL}/services`),
+          axios.get(`${API_URL}/advances`),
+          axios.get(`${API_URL}/expenses`),
+          axios.get(`${API_URL}/clockings`),
+          axios.get(`${API_URL}/employees`),
+         ]);
 
       setServices(servicesRes.data);
       setAdvances(advancesRes.data);
       setExpenses(expensesRes.data);
       setClockings(clockingsRes.data);
-      setEmployees(employeeRes.data)
+      setEmployees(employeeRes.data);
     } catch (err) {
       console.error("Error fetching static data:", err);
     }
@@ -46,7 +46,75 @@ export const DataProvider = ({ children }) => {
     }
   };
 
-  // Decide what axios to run based on identifier
+  // -------------------------
+  // NEW: Report Queries
+  // -------------------------
+
+  // Daily report
+  const fetchDailyData = async (date) => {
+    try {
+      const res = await axios.get(`${API_URL}/reports/daily?date=${date}`);
+      return res.data;
+    } catch (err) {
+      console.error("Error fetching daily report:", err);
+      throw err;
+    }
+  };
+
+  // Weekly report
+    const fetchWeeklyData = async (start, end) => {
+  try {
+    const formatDate = (date) => date.toISOString().split("T")[0];
+
+    const res = await axios.get(`${API_URL}/reports/weekly`, {
+      params: {
+        startDate: formatDate(start), // e.g. "2025-09-29"
+        endDate: formatDate(end),     // e.g. "2025-10-05"
+      },
+    });
+
+    const data = res.data; // { services: [...], expenses: [...], advances: [...] }
+
+    // ✅ Set the context state so the frontend receives it
+    setServices(data.services);
+    setExpenses(data.expenses);
+    setAdvances(data.advances);
+
+    console.log("data arriving into the frontend", data);
+  } catch (err) {
+    console.error("Error fetching weekly report:", err);
+  }
+};
+
+
+  // Monthly report (commented until needed)
+  const fetchMonthlyData = async (year, month) => {
+    try {
+      const res = await axios.get(
+        `${API_URL}/reports/monthly?year=${year}&month=${month}`
+      );
+      return res.data;
+    } catch (err) {
+      console.error("Error fetching monthly report:", err);
+      throw err;
+    }
+  };
+
+  // Yearly report (commented until needed)
+
+  const fetchYearlyData = async (year) => {
+    try {
+      const res = await axios.get(`${API_URL}/reports/yearly?year=${year}`);
+      return res.data;
+    } catch (err) {
+      console.error("Error fetching yearly report:", err);
+      throw err;
+    }
+  };
+
+  // -------------------------
+  // sendFormData (unchanged)
+  // -------------------------
   const sendFormData = async (formIdentifier, formData) => {
     try {
       let res;
@@ -74,9 +142,10 @@ export const DataProvider = ({ children }) => {
           break;
         case "openSalon":
         case "closeSalon":
-          res = formIdentifier === "openSalon"
-            ? await axios.post(`${API_URL}/sessions`, formData)
-            : await axios.put(`${API_URL}/sessions`, formData);
+          res =
+            formIdentifier === "openSalon"
+              ? await axios.post(`${API_URL}/sessions`, formData)
+              : await axios.put(`${API_URL}/sessions`, formData);
           await fetchSessions(); // only refresh sessions
           break;
         default:
@@ -115,6 +184,10 @@ export const DataProvider = ({ children }) => {
         loading,
         fetchAllData,
         sendFormData,
+        // fetchDailyData,
+        fetchWeeklyData,
+        fetchMonthlyData,
+        // fetchYearlyData,
       }}
     >
       {children}

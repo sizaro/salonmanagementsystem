@@ -4,13 +4,14 @@ import { useData } from "../context/DataContext.jsx";
 export default function WorkDailyReport() {
   const { services, employees, advances } = useData();
 
+  console.log("results in the worker's page", services, employees, advances)
+
   const employeeTotals = useMemo(() => {
   if (!services.length) return [];
 
   return employees.map((emp) => {
     const fullName = `${emp.first_name} ${emp.last_name}`;
 
-    // Total salary (only add the amounts for roles the employee actually worked in)
     const totalSalary = services.reduce((sum, s) => {
       if (s.barber === fullName) {
         sum += parseInt(s.barber_amount) || 0;
