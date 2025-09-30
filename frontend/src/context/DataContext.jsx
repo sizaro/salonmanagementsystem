@@ -87,18 +87,29 @@ export const DataProvider = ({ children }) => {
 };
 
 
-  // Monthly report (commented until needed)
+  // Monthly report
   const fetchMonthlyData = async (year, month) => {
-    try {
-      const res = await axios.get(
-        `${API_URL}/reports/monthly?year=${year}&month=${month}`
-      );
-      return res.data;
-    } catch (err) {
-      console.error("Error fetching monthly report:", err);
-      throw err;
-    }
-  };
+  try {
+    const res = await axios.get(`${API_URL}/reports/monthly`, {
+      params: { year, month }
+    });
+
+    const data = res.data; //
+
+    // ✅ Store in context (just like weekly)
+    setServices(data.services);
+    setExpenses(data.expenses);
+    setAdvances(data.advances);
+
+    console.log("Monthly data arriving into the frontend:", data);
+
+    return data;
+  } catch (err) {
+    console.error("Error fetching monthly report:", err);
+    throw err;
+  }
+};
+
 
   // Yearly report (commented until needed)
 
