@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useData } from "../context/DataContext.jsx";
 
-const IncomeMonthlyReport = () => {
-  const { services, advances, expenses, fetchMonthlyData } = useData();
+const IncomeYearlyReport = () => {
+  const { services, expenses, advances, fetchYearlyData } = useData();
 
-  const [monthYear, setMonthYear] = useState(""); // e.g. "2025-09"
+  const [year, setYear] = useState(new Date().getFullYear()); // default to current year
   const [reportLabel, setReportLabel] = useState("");
 
-  // ---- Calculate totals (reuse weekly logic) ----
+  // ---- Calculate totals ----
   const calculateTotals = (services, expenses, advances) => {
     const grossIncome = services.reduce(
       (sum, s) => sum + (parseInt(s.service_amount, 10) || 0),
@@ -26,8 +26,14 @@ const IncomeMonthlyReport = () => {
       0
     );
 
-    const totalExpenses = expenses.reduce((sum, e) => sum + (parseInt(e.amount, 10) || 0), 0);
-    const totalAdvances = advances.reduce((sum, a) => sum + (parseInt(a.amount, 10) || 0), 0);
+    const totalExpenses = expenses.reduce(
+      (sum, e) => sum + (parseInt(e.amount, 10) || 0),
+      0
+    );
+    const totalAdvances = advances.reduce(
+      (sum, a) => sum + (parseInt(a.amount, 10) || 0),
+      0
+    );
 
     const netEmployeeSalary = employeesSalary - totalAdvances;
     const netIncome = grossIncome - (totalExpenses + netEmployeeSalary);
@@ -44,75 +50,114 @@ const IncomeMonthlyReport = () => {
     };
   };
 
-  const { grossIncome, employeesSalary, totalExpenses, totalAdvances, netEmployeeSalary, netIncome, cashAtHand } =
-    calculateTotals(services, expenses, advances);
+  const {
+    grossIncome,
+    employeesSalary,
+    totalExpenses,
+    totalAdvances,
+    netEmployeeSalary,
+    netIncome,
+    cashAtHand,
+  } = calculateTotals(services, expenses, advances);
 
   // ---- Format UTC date strings to EAT ----
   const formatEAT = (dateString) => {
     if (!dateString) return "N/A";
-    return new Date(dateString).toLocaleString("en-UG", {
+    return new Date(dateString).toLocaleDateString("en-UG", {
       timeZone: "Africa/Kampala",
-      hour: "2-digit",
-      minute: "2-digit",
+      year: "numeric",
+      month: "short",
+      day: "numeric",
     });
   };
 
-  // ---- Handle month selection ----
-  const handleMonthChange = (e) => {
-    const value = e.target.value; // "YYYY-MM"
-    if (!value) return;
-
-    const [year, month] = value.split("-").map(Number);
-
-    setMonthYear(value);
-    setReportLabel(`${new Date(year, month - 1, 1).toLocaleDateString("en-US", { month: "long", year: "numeric" })}`);
-
-    fetchMonthlyData(year, month); // context function
+  // ---- Handle year change ----
+  const handleYearChange = (e) => {
+    const selectedYear = parseInt(e.target.value, 10);
+    setYear(selectedYear);
+    setReportLabel(`Year ${selectedYear}`);
+    fetchYearlyData(selectedYear);
   };
 
-  // ---- On page load: current month ----
-  useEffect(() => {
-    const today = new Date();
-    const month = today.getMonth() + 1;
-    const year = today.getFullYear();
-    const value = `${year}-${month.toString().padStart(2, "0")}`;
+  // ---- Generate year options ----
+  const generateYearOptions = () => {
+    const currentYear = new Date().getFullYear();
+    const years = [];
+    for (let y = currentYear; y >= currentYear - 10; y--) {
+      years.push(y);
+    }
+    return years;
+  };
 
-    setMonthYear(value);
-    setReportLabel(`${today.toLocaleString("en-US", { month: "long", year: "numeric" })}`);
-    fetchMonthlyData(year, month);
+  // ---- On page load: current year ----
+  useEffect(() => {
+    const currentYear = new Date().getFullYear();
+    setYear(currentYear);
+    setReportLabel(`Year ${currentYear}`);
+    fetchYearlyData(currentYear);
   }, []);
 
   return (
     <div className="income-page max-w-6xl mx-auto p-4 overflow-y-hidden">
-      <h1 className="text-3xl font-bold text-center mb-6 text-gray-800">Monthly Income Report</h1>
+      <h1 className="text-3xl font-bold text-center mb-6 text-gray-800">
+        Yearly Income Report
+      </h1>
 
-      {/* Month Picker */}
+      {/* Year Picker */}
       <div className="mb-4">
-        <label className="block mb-2 font-medium">Pick a month:</label>
-        <input
-          type="month"
-          value={monthYear}
-          onChange={handleMonthChange}
+        <label className="block mb-2 font-medium">Pick a year:</label>
+        <select
+          value={year}
+          onChange={handleYearChange}
           className="border rounded p-2"
-        />
+        >
+          {generateYearOptions().map((y) => (
+            <option key={y} value={y}>
+              {y}
+            </option>
+          ))}
+        </select>
         <p className="mt-2 text-gray-600">{reportLabel}</p>
       </div>
 
       {/* Summary Section */}
       <section className="bg-white shadow-md rounded-lg p-4 mb-6">
         <h2 className="text-xl font-semibold text-blue-700 mb-2">Summary</h2>
-        <p><span className="font-medium">Gross Income:</span> {grossIncome.toLocaleString()} UGX</p>
-        <p><span className="font-medium">Employees Salary:</span> {employeesSalary.toLocaleString()} UGX</p>
-        <p><span className="font-medium">Expenses:</span> {totalExpenses.toLocaleString()} UGX</p>
-        <p><span className="font-medium">Advances:</span> {totalAdvances.toLocaleString()} UGX</p>
-        <p><span className="font-medium">Net Employees Salary:</span> {netEmployeeSalary.toLocaleString()} UGX</p>
-        <p><span className="font-medium">Salon Net Income:</span> {netIncome.toLocaleString()} UGX</p>
-        <p><span className="font-medium">Total Cash Available:</span> {cashAtHand.toLocaleString()} UGX</p>
+        <p>
+          <span className="font-medium">Gross Income:</span>{" "}
+          {grossIncome.toLocaleString()} UGX
+        </p>
+        <p>
+          <span className="font-medium">Employees Salary:</span>{" "}
+          {employeesSalary.toLocaleString()} UGX
+        </p>
+        <p>
+          <span className="font-medium">Expenses:</span>{" "}
+          {totalExpenses.toLocaleString()} UGX
+        </p>
+        <p>
+          <span className="font-medium">Advances:</span>{" "}
+          {totalAdvances.toLocaleString()} UGX
+        </p>
+        <p>
+          <span className="font-medium">Net Employees Salary:</span>{" "}
+          {netEmployeeSalary.toLocaleString()} UGX
+        </p>
+        <p>
+          <span className="font-medium">Salon Net Income:</span>{" "}
+          {netIncome.toLocaleString()} UGX
+        </p>
+        <p>
+          <span className="font-medium">Total Cash Available:</span>{" "}
+          {cashAtHand.toLocaleString()} UGX
+        </p>
       </section>
 
       {/* Services Table */}
       <section className="bg-white shadow-md rounded-lg p-4">
-        <h2 className="text-xl font-semibold text-blue-700 mb-4">Services Rendered</h2>
+        <h2 className="text-xl font-semibold text-blue-700 mb-4">
+          Services Rendered
+        </h2>
         <div className="w-full overflow-x-auto max-h-[60vh] overflow-y-auto border border-gray-300 rounded">
           <table className="min-w-full border-collapse text-sm">
             <thead className="bg-blue-700 text-white sticky top-0 z-10">
@@ -128,13 +173,19 @@ const IncomeMonthlyReport = () => {
                 <th className="px-3 py-2 text-left">Scrub Aesthetician</th>
                 <th className="px-3 py-2 text-left">Scrubber Amount</th>
                 <th className="px-3 py-2 text-left">Black Shampoo Aesthetician</th>
-                <th className="px-3 py-2 text-left">Black Shampoo Aesthetician Amount</th>
+                <th className="px-3 py-2 text-left">
+                  Black Shampoo Aesthetician Amount
+                </th>
                 <th className="px-3 py-2 text-left">Black Shampoo Amount</th>
                 <th className="px-3 py-2 text-left">Super Black Aesthetician</th>
-                <th className="px-3 py-2 text-left">Super Black Aesthetician Amount</th>
+                <th className="px-3 py-2 text-left">
+                  Super Black Aesthetician Amount
+                </th>
                 <th className="px-3 py-2 text-left">Super Black Amount</th>
                 <th className="px-3 py-2 text-left">Black Mask Aesthetician</th>
-                <th className="px-3 py-2 text-left">Black Mask Aesthetician Amount</th>
+                <th className="px-3 py-2 text-left">
+                  Black Mask Aesthetician Amount
+                </th>
                 <th className="px-3 py-2 text-left">Black Mask Amount</th>
                 <th className="px-3 py-2 text-left">Time of Service</th>
               </tr>
@@ -155,14 +206,22 @@ const IncomeMonthlyReport = () => {
                   <td className="px-3 py-2">{service.barber_assistant_amount}</td>
                   <td className="px-3 py-2">{service.scrubber_assistant || "-"}</td>
                   <td className="px-3 py-2">{service.scrubber_assistant_amount}</td>
-                  <td className="px-3 py-2">{service.black_shampoo_assistant || "-"}</td>
-                  <td className="px-3 py-2">{service.black_shampoo_assistant_amount || "-"}</td>
+                  <td className="px-3 py-2">
+                    {service.black_shampoo_assistant || "-"}
+                  </td>
+                  <td className="px-3 py-2">
+                    {service.black_shampoo_assistant_amount || "-"}
+                  </td>
                   <td className="px-3 py-2">{service.black_shampoo_amount}</td>
                   <td className="px-3 py-2">{service.super_black_assistant || "-"}</td>
-                  <td className="px-3 py-2">{service.super_black_assistant_amount || "-"}</td>
+                  <td className="px-3 py-2">
+                    {service.super_black_assistant_amount || "-"}
+                  </td>
                   <td className="px-3 py-2">{service.super_black_amount}</td>
                   <td className="px-3 py-2">{service.black_mask_assistant || "-"}</td>
-                  <td className="px-3 py-2">{service.black_mask_assistant_amount || "-"}</td>
+                  <td className="px-3 py-2">
+                    {service.black_mask_assistant_amount || "-"}
+                  </td>
                   <td className="px-3 py-2">{service.black_mask_amount}</td>
                   <td className="px-3 py-2">
                     {formatEAT(service.service_timestamp)}
@@ -177,4 +236,4 @@ const IncomeMonthlyReport = () => {
   );
 };
 
-export default IncomeMonthlyReport;
+export default IncomeYearlyReport;

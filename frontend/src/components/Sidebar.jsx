@@ -56,6 +56,7 @@ export default function Sidebar() {
                 <li><Link to="/pages/IncomeDailyReport" className={linkClass('/pages/IncomeDailyReport')}>Daily</Link></li>
                 <li><Link to="/pages/IncomeWeeklyReport" className={linkClass('/pages/IncomeWeeklyReport')}>Weekly</Link></li>
                 <li><Link to="/pages/IncomeMonthlyReport" className={linkClass('/pages/IncomeMonthlyReport')}>Monthly</Link></li>
+                <li><Link to="/pages/IncomeYearlyReport" className={linkClass('/pages/IncomeYearlyReport')}>Yearly</Link></li>
               </ul>
             )}
           </li>
@@ -118,6 +119,7 @@ export default function Sidebar() {
                 <li><Link to="/pages/IncomeDailyReport" onClick={() => setMenuOpen(false)} className={linkClass('/pages/IncomeDailyReport')}>Daily</Link></li>
                 <li><Link to="/pages/IncomeWeeklyReport" onClick={() => setMenuOpen(false)} className={linkClass('/pages/IncomeWeeklyReport')}>Weekly</Link></li>
                 <li><Link to="/pages/IncomeMonthlyReport" onClick={() => setMenuOpen(false)} className={linkClass('/pages/IncomeMonthlyReport')}>Monthly</Link></li>
+                <li><Link to="/pages/IncomeYearlyReport" onClick={() => setMenuOpen(false)} className={linkClass('/pages/IncomeYearlyReport')}>Yearly</Link></li>
               </ul>
             )}
           </li>

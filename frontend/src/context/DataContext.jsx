@@ -113,15 +113,28 @@ export const DataProvider = ({ children }) => {
 
   // Yearly report (commented until needed)
 
-  const fetchYearlyData = async (year) => {
-    try {
-      const res = await axios.get(`${API_URL}/reports/yearly?year=${year}`);
-      return res.data;
-    } catch (err) {
-      console.error("Error fetching yearly report:", err);
-      throw err;
-    }
-  };
+  // Yearly report
+const fetchYearlyData = async (year) => {
+  try {
+    const res = await axios.get(`${API_URL}/reports/yearly`, {
+      params: { year },
+    });
+
+    const data = res.data; // { services, expenses, advances }
+
+    // ✅ Update context state
+    setServices(data.services);
+    setExpenses(data.expenses);
+    setAdvances(data.advances);
+
+    console.log("Yearly data arriving into frontend:", data);
+
+    return data; // optional if a page wants to use it directly
+  } catch (err) {
+    console.error("Error fetching yearly report:", err);
+  }
+};
+
 
   // -------------------------
   // sendFormData (unchanged)
@@ -198,7 +211,7 @@ export const DataProvider = ({ children }) => {
         // fetchDailyData,
         fetchWeeklyData,
         fetchMonthlyData,
-        // fetchYearlyData,
+        fetchYearlyData,
       }}
     >
       {children}

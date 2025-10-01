@@ -4,6 +4,7 @@ import Dashboard from './pages/Dashboard';
 import IncomeDailyReport from './pages/IncomeDailyReport';
 import IncomeWeeklyReport from './pages/IncomeWeeklyReport';
 import IncomeMonthlyReport from './pages/IncomeMonthlyReport';
+import IncomeYearlyReport from './pages/IncomeYearlyReport';
 import ExpensesDailyReport from './pages/ExpensesDailyReport';
 import WorkDailyReport from './pages/WorkDailyReport';
 function App() {
@@ -17,6 +18,7 @@ function App() {
           <Route path="/pages/IncomeDailyReport" element={<IncomeDailyReport />} />
           <Route path="/pages/IncomeWeeklyReport" element={<IncomeWeeklyReport />} />
           <Route path="/pages/IncomeMonthlyReport" element={<IncomeMonthlyReport />} />
+           <Route path="/pages/IncomeYearlyReport" element={<IncomeYearlyReport />} />
           <Route path="/pages/ExpensesDailyReport" element={<ExpensesDailyReport/>} />
           <Route path="/pages/WorkDailyReport" element={<WorkDailyReport/>} />
           <Route path="/workers" element={<div>Worker Performance</div>} />
