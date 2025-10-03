@@ -47,7 +47,7 @@ const ExpensesYearlyReport = () => {
     const currentYear = new Date().getFullYear();
     setYear(currentYear);
     setReportLabel(`Year ${currentYear}`);
-    fetchYearlyExpenses(currentYear);
+    fetchYearlyData(currentYear);
   }, []);
 
   if (!expenses.length) return <p>No expenses recorded for this year yet.</p>;

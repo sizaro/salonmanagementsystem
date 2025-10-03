@@ -3,7 +3,7 @@ import monthlyModel from "../models/monthlyModel.js";
 // Controller to handle requests for monthly reports
 export const getMonthlyReport = async (req, res) => {
   try {
-    const { year, month } = req.query; // e.g. year=2025, month=9
+    const { year, month } = req.query; // e.g. year=2025, month=10
     console.log("Received in the controller year:", year, "month:", month);
 
     const today = new Date();
@@ -11,6 +11,7 @@ export const getMonthlyReport = async (req, res) => {
     // Construct the month start (1st day) and end (last day)
     const rangeStart = new Date(year, month - 1, 1); // JS months are 0-based
     let rangeEnd = new Date(year, month, 0); // last day of the month
+    rangeEnd.setHours(23, 59, 59, 999); // include entire day
 
     let scenario = "";
 
@@ -26,20 +27,18 @@ export const getMonthlyReport = async (req, res) => {
     }
 
     // Scenario 1: Current month
-    if (
-      rangeStart <= today &&
-      rangeEnd >= today // today is inside this month
-    ) {
+    if (rangeStart <= today && rangeEnd >= today) {
       scenario = "current";
       const yesterday = new Date(today);
       yesterday.setDate(today.getDate() - 1);
-      rangeEnd = yesterday; // cut off at yesterday
+      yesterday.setHours(23, 59, 59, 999); // include full yesterday
+      rangeEnd = yesterday; 
     }
 
     // Scenario 2: Past month
     if (rangeEnd < today) {
       scenario = "past";
-      // no changes, keep full month
+      // already adjusted rangeEnd to last day 23:59:59
     }
 
     // Fetch DB data

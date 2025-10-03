@@ -27,6 +27,7 @@ export const getYearlyReport = async (req, res) => {
       scenario = "current";
       const yesterday = new Date(today);
       yesterday.setDate(today.getDate() - 1);
+      yesterday.setHours(23, 59, 59, 999);
       rangeEnd = yesterday;
     }
 

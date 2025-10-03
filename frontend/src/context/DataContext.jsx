@@ -51,15 +51,32 @@ export const DataProvider = ({ children }) => {
   // -------------------------
 
   // Daily report
-  const fetchDailyData = async (date) => {
-    try {
-      const res = await axios.get(`${API_URL}/reports/daily?date=${date}`);
-      return res.data;
-    } catch (err) {
-      console.error("Error fetching daily report:", err);
-      throw err;
-    }
-  };
+  // Daily report
+const fetchDailyData = async (date) => {
+  try {
+    // Format the date to YYYY-MM-DD if needed
+    const formatDate = (d) => new Date(d).toISOString().split("T")[0];
+
+    const res = await axios.get(`${API_URL}/reports/daily`, {
+      params: { date: formatDate(date) }, // e.g. "2025-10-02"
+    });
+
+    const data = res.data; // { services: [...], expenses: [...], advances: [...] }
+
+    // ✅ Set the context state just like weekly/monthly
+    setServices(data.services);
+    setExpenses(data.expenses);
+    setAdvances(data.advances);
+
+    console.log("Daily data arriving into the frontend", data);
+
+    return data; // return in case needed
+  } catch (err) {
+    console.error("Error fetching daily report:", err);
+    throw err;
+  }
+};
+
 
   // Weekly report
     const fetchWeeklyData = async (start, end) => {
@@ -208,7 +225,7 @@ const fetchYearlyData = async (year) => {
         loading,
         fetchAllData,
         sendFormData,
-        // fetchDailyData,
+        fetchDailyData,
         fetchWeeklyData,
         fetchMonthlyData,
         fetchYearlyData,

@@ -1,53 +1,60 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import { useData } from "../context/DataContext.jsx";
 
 export default function WorkDailyReport() {
-  const { services, employees, advances } = useData();
+  const { services, employees, advances, fetchDailyData } = useData();
 
-  console.log("results in the worker's page", services, employees, advances)
+  // Initialize date state to today (YYYY-MM-DD)
+  const today = new Date().toISOString().split("T")[0];
+  const [selectedDate, setSelectedDate] = useState(today);
+
+  // Fetch data on page load for today
+  useEffect(() => {
+    fetchDailyData(selectedDate);
+  }, []); // run once on mount
+
+  // Fetch data whenever the selected date changes
+  const handleDayChange = (e) => {
+    const newDate = e.target.value; // format: YYYY-MM-DD
+    setSelectedDate(newDate);
+    fetchDailyData(newDate);
+  };
+
+  console.log("results in the worker's page", services, employees, advances);
 
   const employeeTotals = useMemo(() => {
-  if (!services.length) return [];
+    if (!services.length) return [];
 
-  return employees.map((emp) => {
-    const fullName = `${emp.first_name} ${emp.last_name}`;
+    return employees.map((emp) => {
+      const fullName = `${emp.first_name} ${emp.last_name}`;
 
-    const totalSalary = services.reduce((sum, s) => {
-      if (s.barber === fullName) {
-        sum += parseInt(s.barber_amount) || 0;
-      }
-      if (s.barber_assistant === fullName) {
-        sum += parseInt(s.barber_assistant_amount) || 0;
-      }
-      if (s.scrubber_assistant === fullName) {
-        sum += parseInt(s.scrubber_assistant_amount) || 0;
-      }
-      if (s.black_shampoo_assistant === fullName) {
-        sum += parseInt(s.black_shampoo_assistant_amount) || 0;
-      }
-      if (s.super_black_assistant === fullName) {
-        sum += parseInt(s.super_black_assistant_amount) || 0;
-      }
-      if (s.black_mask_assistant === fullName) {
-        sum += parseInt(s.black_mask_assistant_amount) || 0;
-      }
-      return sum;
-    }, 0);
+      const totalSalary = services.reduce((sum, s) => {
+        if (s.barber === fullName) sum += parseInt(s.barber_amount) || 0;
+        if (s.barber_assistant === fullName)
+          sum += parseInt(s.barber_assistant_amount) || 0;
+        if (s.scrubber_assistant === fullName)
+          sum += parseInt(s.scrubber_assistant_amount) || 0;
+        if (s.black_shampoo_assistant === fullName)
+          sum += parseInt(s.black_shampoo_assistant_amount) || 0;
+        if (s.super_black_assistant === fullName)
+          sum += parseInt(s.super_black_assistant_amount) || 0;
+        if (s.black_mask_assistant === fullName)
+          sum += parseInt(s.black_mask_assistant_amount) || 0;
+        return sum;
+      }, 0);
 
-    // Total advances for today
-    const totalAdvances = advances
-      .filter((a) => a.employee_name === fullName)
-      .reduce((sum, a) => sum + (parseInt(a.amount) || 0), 0);
+      const totalAdvances = advances
+        .filter((a) => a.employee_name === fullName)
+        .reduce((sum, a) => sum + (parseInt(a.amount) || 0), 0);
 
-    return {
-      name: fullName,
-      totalSalary,
-      totalAdvances,
-      netSalary: totalSalary - totalAdvances,
-    };
-  });
-}, [services, advances, employees]);
-
+      return {
+        name: fullName,
+        totalSalary,
+        totalAdvances,
+        netSalary: totalSalary - totalAdvances,
+      };
+    });
+  }, [services, advances, employees]);
 
   if (!services.length) {
     return (
@@ -55,6 +62,16 @@ export default function WorkDailyReport() {
         <h2 className="text-xl font-bold text-center text-gray-700">
           No Recorded Work Yet
         </h2>
+        {/* Date Picker */}
+        <div className="mt-4 text-center">
+          <label className="font-medium mr-2">Select Date:</label>
+          <input
+            type="date"
+            value={selectedDate}
+            onChange={handleDayChange}
+            className="border rounded px-2 py-1"
+          />
+        </div>
       </section>
     );
   }
@@ -64,6 +81,17 @@ export default function WorkDailyReport() {
       <h2 className="text-2xl font-bold mb-4 text-gray-800">
         Workers Daily Report
       </h2>
+
+      {/* Date Picker */}
+      <div className="mb-4">
+        <label className="font-medium mr-2">Select Date:</label>
+        <input
+          type="date"
+          value={selectedDate}
+          onChange={handleDayChange}
+          className="border rounded px-2 py-1"
+        />
+      </div>
 
       <div className="overflow-x-auto overflow-y-auto max-h-[60vh] border rounded">
         <table className="min-w-full border-collapse">
