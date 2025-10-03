@@ -11,6 +11,7 @@ export async function getDailyReport(req, res) {
         services: [],
         expenses: [],
         advances: [],
+        clockings: []
       });
     }
 
@@ -25,18 +26,15 @@ export async function getDailyReport(req, res) {
     endOfDay.setHours(23, 59, 59, 999);
 
     // Fetch data from the model
-    const [servicesResult, expensesResult, advancesResult] = await Promise.all([
+    const [services, expenses, advances, clockings] = await Promise.all([
       dailyModel.getServicesByDay(startOfDay.toISOString(), endOfDay.toISOString()),
       dailyModel.getExpensesByDay(startOfDay.toISOString(), endOfDay.toISOString()),
       dailyModel.getAdvancesByDay(startOfDay.toISOString(), endOfDay.toISOString()),
+      dailyModel.getClockingsByDay(startOfDay.toISOString(), endOfDay.toISOString())
     ]);
 
-    const services = servicesResult.rows;
-    const expenses = expensesResult.rows;
-    const advances = advancesResult.rows;
-
     // Return as JSON
-    res.json({ services, expenses, advances });
+    res.json({ services, expenses, advances, clockings });
 
   } catch (error) {
     console.error("Error fetching daily report:", error);

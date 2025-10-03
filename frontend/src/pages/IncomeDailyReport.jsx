@@ -11,7 +11,7 @@ const IncomeDailyReport = () => {
 
   const session = sessions && sessions.length > 0 ? sessions[0] : null;
   const [liveDuration, setLiveDuration] = useState("");
-  const [selectedDate, setSelectedDate] = useState(today.toISOString().split("T")[0]); // YYYY-MM-DD
+  const [selectedDate, setSelectedDate] = useState(today.toLocaleDateString("en-CA")); // YYYY-MM-DD
 
   // ---- Totals Calculation ----
   const calculateTotals = (services, expenses, advances) => {

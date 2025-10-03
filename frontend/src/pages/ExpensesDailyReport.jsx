@@ -5,7 +5,7 @@ const ExpensesDailyReport = () => {
   const { expenses, fetchDailyData } = useData();
 
   // Default date is today (YYYY-MM-DD)
-  const today = new Date().toISOString().split("T")[0];
+  const today = new Date().toLocaleDateString("en-CA");
   const [selectedDate, setSelectedDate] = useState(today);
 
   // Fetch data on page load

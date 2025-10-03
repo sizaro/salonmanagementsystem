@@ -15,7 +15,6 @@ const mockEmployees = [
   { id: 12, first_name: "Tendo", last_name: "Mirembe", phone: "750795036" },
 ];
 
-
 export default function ClockForm({ onSubmit, onClose }) {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [formData, setFormData] = useState({
@@ -32,16 +31,14 @@ export default function ClockForm({ onSubmit, onClose }) {
   };
 
   const handleClockIn = () => { 
-  onSubmit("clockin", formData); 
-  onClose();             
-};
+    onSubmit("clockin", formData); 
+    onClose();             
+  };
 
-const handleClockOut = () => {
-  setFormData(updatedForm);  
-  onSubmit("clockout", formData); 
-  onClose();       
-};
-
+  const handleClockOut = () => {
+    onSubmit("clockout", formData); 
+    onClose();       
+  };
 
   return (
     <div className="space-y-6">
@@ -54,8 +51,8 @@ const handleClockOut = () => {
 
       {/* Employee dropdown */}
       <select
-        name="employeeId"
-        value={formData.employeeId}
+        name="employeeName"
+        value={formData.employeeName}
         onChange={handleEmployeeChange}
         required
         className="w-full border px-2 py-1"

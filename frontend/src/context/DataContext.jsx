@@ -67,6 +67,7 @@ const fetchDailyData = async (date) => {
     setServices(data.services);
     setExpenses(data.expenses);
     setAdvances(data.advances);
+    setClockings(data.clockings)
 
     console.log("Daily data arriving into the frontend", data);
 
@@ -181,6 +182,10 @@ const fetchYearlyData = async (year) => {
           res = await axios.post(`${API_URL}/clockings`, formData);
           await fetchAllData();
           break;
+        case "updateClocking":
+          res = await axios.put(`${API_URL}/clockings`, formData);
+          await fetchAllData();
+          break;  
         case "openSalon":
         case "closeSalon":
           res =

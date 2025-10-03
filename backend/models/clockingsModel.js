@@ -4,13 +4,13 @@ import db from './database.js';
 export const saveClocking = async (
   employeeName) => {
   const query = `
-    INSERT INTO employee_clocking (
-      employee_names,
-      clock_in,
-      clock_out,
-      created_at,
-      updated_at
-    ) VALUES ($1, NOW(), NULL, NOW(), NULL)
+    INSERT INTO employee_clocking (employee_names, clock_in, clock_out, created_at, updated_at)
+SELECT CAST($1 AS TEXT), NOW(), NULL, NOW(), NULL
+WHERE NOT EXISTS (
+  SELECT 1 FROM employee_clocking
+  WHERE employee_names = $1 AND clock_out IS NULL
+);
+
   `;
 
   const values = [
