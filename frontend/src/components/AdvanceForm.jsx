@@ -17,6 +17,8 @@ export default function AdvanceForm({ onSubmit, onClose }) {
   { id: 10, first_name: "Kwikiriza", last_name: "Phinnah", phone: "742927521" },
   { id: 11, first_name: "Muzale Grace", last_name: "innocent", phone: "754954054" },
   { id: 12, first_name: "Tendo", last_name: "Mirembe", phone: "750795036" },
+  { id: 13, first_name: "Nakato", last_name: "Hilda", phone: "700465015" },
+  { id: 14, first_name: "Bazibu", last_name: "Nickolas", phone: "750411158" },
 ];
 
   const handleChange = (e) => {
