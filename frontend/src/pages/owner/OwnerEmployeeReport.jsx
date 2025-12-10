@@ -38,7 +38,7 @@ console.log("📝 late fees in the report for employee page", lateFees);
 console.log("📝 tag fees in the report for employee page", tagFees);
 console.log("📝 advances in the report for employee page", advances);
 
-const toYMD = (date) => date.toISOString().split("T")[0];
+const toYMD = (date) => date.toLocaleDateString("en-CA");
 const today = new Date();
 
 const [selectedEmployee, setSelectedEmployee] = useState(null);

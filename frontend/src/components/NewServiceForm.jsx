@@ -24,7 +24,7 @@ export default function NewServiceForm({ onSubmit, onClose, Sections, serviceDat
         salon_amount: serviceData.salon_amount || "",
         section_id: serviceData.section_id || "",
         description: serviceData.description || "",
-        service_image: null, // can't prefill file input
+        service_image: null,
         roles: serviceData.roles?.length
           ? serviceData.roles.map((r) => ({
               role_name: r.role_name || "",
@@ -167,23 +167,23 @@ export default function NewServiceForm({ onSubmit, onClose, Sections, serviceDat
       <Button type="button" className="bg-yellow-500 text-black" onClick={addRole}>+ Add Role</Button>
 
       {/* MATERIALS */}
-      <h3 className="text-lg font-semibold mt-6">Service Materials</h3>
+      <h3 className="text-lg font-semibold mt-6">Other Services</h3>
       {formData.materials.map((mat, index) => (
         <div key={index} className="border p-3 rounded-lg bg-blue-100 shadow-sm space-y-2">
           <label className="block font-medium">
-            Material Name:
+            Service Name:
             <input type="text" className="border rounded w-full p-2 mt-1" value={mat.material_name} onChange={(e) => handleMaterialChange(index, "material_name", e.target.value)} />
           </label>
 
           <label className="block font-medium">
-            Material Cost:
+            Service Cost:
             <input type="text" className="border rounded w-full p-2 mt-1" value={mat.material_cost} onChange={(e) => handleMaterialChange(index, "material_cost", e.target.value.replace(/[^\d.]/g, ""))} />
           </label>
 
           {index > 0 && <Button type="button" className="bg-red-600 text-white" onClick={() => removeMaterial(index)}>Remove Material</Button>}
         </div>
       ))}
-      <Button type="button" className="bg-green-500 text-black" onClick={addMaterial}>+ Add Material</Button>
+      <Button type="button" className="bg-green-500 text-black" onClick={addMaterial}>+ Add Service</Button>
 
       {/* SUBMIT */}
       <div className="flex gap-3 mt-5">

@@ -115,19 +115,62 @@ export const deleteServiceDefinition = async (req, res) => {
 // =========================================================
 
 // CREATE SERVICE TRANSACTION
+
 export const createServiceTransaction = async (req, res) => {
   try {
-    const { service_definition_id, created_by, appointment_date, appointment_time, customer_id, customer_note, status, performers = [] } = req.body;
+    const {
+      service_definition_id,
+      created_by,
+      appointment_date,
+      appointment_time,
+      customer_id,
+      customer_note,
+      status,
+      performers = []
+    } = req.body;
 
-    const data = { service_definition_id, created_by, appointment_date, appointment_time, customer_id, customer_note, status, performers };
+    const data = {
+      service_definition_id,
+      created_by,
+      appointment_date,
+      appointment_time,
+      customer_id,
+      customer_note,
+      status,
+      performers
+    };
 
     const transaction = await saveServiceTransaction(data);
+
+    // 🔥 SOCKET IO EMITS
+    const io = req.app.get("io") || global.io;
+
+    if (io) {
+      const isAppointment =
+        appointment_date !== null &&
+        appointment_time !== null &&
+        status !== null;
+
+      if (isAppointment) {
+        io.emit("appointment_created", {
+          id: transaction.id,
+          data: transaction,
+        });
+        console.log("📢 Emitted appointment_created");
+      }
+    }
+
     res.json({ success: true, data: transaction });
+
   } catch (err) {
     console.error(err);
-    res.status(500).json({ success: false, message: "Failed to create service transaction" });
+    res.status(500).json({
+      success: false,
+      message: "Failed to create service transaction",
+    });
   }
 };
+
 
 // GET ALL SERVICE TRANSACTIONS
 export const getAllServiceTransactions = async (req, res) => {

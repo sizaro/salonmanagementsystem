@@ -14,7 +14,6 @@ const OwnerEmployees = () => {
     deleteUser,
   } = useData();
 
-  // Filter out 'Saleh Ntege' and customers
   const employees = users.filter(
     (user) =>user.role !== "customer"
   );
