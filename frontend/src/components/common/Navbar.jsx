@@ -5,7 +5,7 @@ import Modal from "../../components/Modal.jsx";
 import LoginForm from "../../components/auth/login.jsx";
 import UserForm from "../../components/UserForm.jsx";
 import { useData } from "../../context/DataContext.jsx";
-import ForgotPasswordForm from "../auth/forgotPasswordForm.jsx";
+import ForgotPasswordForm from "../../components/auth/ForgotPasswordForm.jsx";
 import ToastModal from "../../components/ToastModal.jsx";
 
 export default function Navbar() {
