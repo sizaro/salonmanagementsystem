@@ -15,7 +15,7 @@ export const createPasswordReset = async (userId, token, expiresAt) => {
 };
 
 /**
- * Get password reset entry by token (only if not expired)
+ * Get password reset entry by token (only if not expired))
  */
 export const getPasswordResetByToken = async (token) => {
   const query = `
