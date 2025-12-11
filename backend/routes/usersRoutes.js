@@ -23,7 +23,7 @@ router.post('/', upload.single("image_url"), createUser);
 // PUT update an existing user by ID
 router.put('/:id', upload.single("image_url"),  updateUserById);
 
-// DELETE remove a user by ID
+// DELETE remove a user by IDs
 router.delete('/:id', deleteUserById);
 
 export default router;
