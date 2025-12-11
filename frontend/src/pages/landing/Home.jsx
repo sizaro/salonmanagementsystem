@@ -97,7 +97,7 @@ export default function Home() {
           className="w-full h-64 object-cover rounded-t-xl"
         />
         <div className="p-4 text-center">
-          <h3 className="text-xl font-semibold mb-2">Hair Styling</h3>
+          <h3 className="text-xl font-semibold mb-2">Hair Cuts</h3>
           <p className="text-gray-600 text-sm">
             Elegant haircuts and styling for men, women, and children. Our professionals create the perfect look for every occasion.
           </p>
@@ -343,7 +343,7 @@ export default function Home() {
           <img
             src="/images/appointment_dashboard.jpg"
             alt="Digital booking"
-            className="w-full h-80 object-cover rounded-xl mb-6 shadow-md"
+            className="w-full md:w-80 h-80 object-cover rounded-xl mb-6 shadow-md"
           />
           <p className="text-gray-700 mb-4">
             Click “Account” at the top to get started.
