@@ -335,7 +335,7 @@ export default function Home() {
 
       {/* ================= DIGITAL BOOKING ================= */}
       <section className="py-16 bg-gray-100">
-        <div className="max-w-7xl mx-auto px-6 text-center">
+        <div className="max-w-7xl mx-auto px-6 text-center flex flex-col justify-center align-center">
           <h2 className="text-3xl font-bold mb-4 text-gray-800">Book Appointments Online</h2>
           <p className="text-gray-600 max-w-3xl mx-auto mb-6">
             Easily create an account and book your appointments online. Already have an account? Simply sign in.
@@ -343,7 +343,7 @@ export default function Home() {
           <img
             src="/images/appointment_dashboard.jpg"
             alt="Digital booking"
-            className="w-full md:w-[80%] h-80 object-cover rounded-xl mb-6 shadow-md"
+            className="w-full md:w-[80%] h-80 object-contain center rounded-xl mb-6 shadow-md"
           />
           <p className="text-gray-700 mb-4">
             Click “Account” at the top to get started.
