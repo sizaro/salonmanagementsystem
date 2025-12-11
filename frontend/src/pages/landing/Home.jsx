@@ -343,7 +343,7 @@ export default function Home() {
           <img
             src="/images/appointment_dashboard.jpg"
             alt="Digital booking"
-            className="w-full md:w-[80vw] h-80 object-cover center rounded-xl mb-6 shadow-md"
+            className="w-full md:w-[80vw] h-80 object-cover rounded-xl mb-6 shadow-md"
           />
           <p className="text-gray-700 mb-4">
             Click “Account” at the top to get started.
