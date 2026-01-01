@@ -1,13 +1,45 @@
-import { saveClocking, updateClockingModel, fetchAllClockings} from '../models/clockingsModel.js';
+import dotenv from "dotenv";
+dotenv.config();
 
+import {
+  saveClocking,
+  updateClockingModel,
+  fetchAllClockings
+} from "../models/clockingsModel.js";
+
+/**
+ * Resolve salon_id safely:
+ * 1. Authenticated user
+ * 2. Request-scoped salon (future)
+ * 3. DEFAULT_SALON_ID from env
+ */
+const resolveSalonId = (req) => {
+  return (
+    req.user?.salon_id ||
+    req.salon_id ||
+    Number(process.env.DEFAULT_SALON_ID)
+  );
+};
+
+// ---------------- CREATE CLOCKING ----------------
 export const createClocking = async (req, res) => {
   try {
     const { employee_id } = req.body;
+    const salon_id = resolveSalonId(req);
 
-    console.log("data coming from the frontend", employee_id)
+    if (!salon_id) {
+      return res.status(400).json({ message: "Missing salon context" });
+    }
 
-    // Call the model to save in DB
-    await saveClocking(employee_id);
+    console.log("data coming from the frontend", {
+      employee_id,
+      salon_id
+    });
+
+    await saveClocking({
+      employee_id,
+      salon_id
+    });
 
     res.status(201).json({
       message: "Clocking created successfully",
@@ -18,12 +50,25 @@ export const createClocking = async (req, res) => {
   }
 };
 
+// ---------------- UPDATE CLOCKING ----------------
 export const updateClocking = async (req, res) => {
   try {
-    const { employee_id } = req.body
+    const { employee_id } = req.body;
+    const salon_id = resolveSalonId(req);
 
-    console.log("data arriving for update", employee_id)
-    await updateClockingModel(employee_id);
+    if (!salon_id) {
+      return res.status(400).json({ message: "Missing salon context" });
+    }
+
+    console.log("data arriving for update", {
+      employee_id,
+      salon_id
+    });
+
+    await updateClockingModel({
+      employee_id,
+      salon_id
+    });
 
     res.status(200).json({
       message: "Clocking updated successfully",
@@ -34,13 +79,22 @@ export const updateClocking = async (req, res) => {
   }
 };
 
+// ---------------- GET ALL CLOCKINGS ----------------
 export const getAllClocking = async (req, res) => {
   try {
-    const clockings = await fetchAllClockings();
-    console.log("this is in the controller for clockings", clockings)
+    const salon_id = resolveSalonId(req);
+
+    if (!salon_id) {
+      return res.status(400).json({ message: "Missing salon context" });
+    }
+
+    const clockings = await fetchAllClockings(salon_id);
+
+    console.log("this is in the controller for clockings", clockings);
+
     res.status(200).json(clockings);
   } catch (err) {
-    console.error('Error fetching clockings:', err);
-    res.status(500).json({ error: 'Failed to fetch clockings' });
+    console.error("Error fetching clockings:", err);
+    res.status(500).json({ error: "Failed to fetch clockings" });
   }
 };

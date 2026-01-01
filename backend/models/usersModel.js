@@ -1,25 +1,26 @@
 import db from './database.js';
 
 /**
- * Fetch all users
+ * Fetch all users for a given salon
  */
-export const fetchAllUsers = async () => {
+export const fetchAllUsers = async (salon_id) => {
   const query = `
     SELECT u.*,
            (u.created_at AT TIME ZONE 'Africa/Kampala') AS user_time
     FROM users u
+    WHERE u.salon_id = $1
     ORDER BY u.id ASC;
   `;
-  const result = await db.query(query);
+  const result = await db.query(query, [salon_id]);
   return result.rows;
 };
 
 /**
- * Fetch single user by ID
+ * Fetch single user by ID for a given salon
  */
-export const fetchUserById = async (id) => {
-  const query = `SELECT * FROM users WHERE id = $1;`;
-  const result = await db.query(query, [id]);
+export const fetchUserById = async (id, salon_id) => {
+  const query = `SELECT * FROM users WHERE id = $1 AND salon_id = $2;`;
+  const result = await db.query(query, [id, salon_id]);
   return result.rows[0];
 };
 
@@ -27,6 +28,7 @@ export const fetchUserById = async (id) => {
  * Save new user
  */
 export const saveUser = async ({
+  salon_id,
   first_name,
   middle_name,
   last_name,
@@ -47,10 +49,10 @@ export const saveUser = async ({
       (
         first_name, middle_name, last_name, email, password, 
         birthdate, contact, next_of_kin, next_of_kin_contact, 
-        role, specialty, status, bio, image_url, created_at
+        role, specialty, status, bio, image_url, salon_id, created_at
       ) 
     VALUES 
-      ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,NOW())
+      ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,NOW())
     RETURNING *;
   `;
 
@@ -68,15 +70,21 @@ export const saveUser = async ({
     specialty || null,
     status || 'active',
     bio || null,
-    image_url
+    image_url || null,
+    salon_id
   ];
 
   const result = await db.query(query, values);
   return result.rows[0];
 };
+
+/**
+ * Update user by ID and salon
+ */
 export const UpdateUserById = async (data) => {
   let {
     id,
+    salon_id,
     first_name,
     middle_name,
     last_name,
@@ -93,13 +101,9 @@ export const UpdateUserById = async (data) => {
     image_url,
   } = data;
 
-  // Ensure ID is a valid integer
   id = parseInt(id, 10);
-  if (isNaN(id)) {
-    throw new Error("Invalid user ID (NaN or undefined)");
-  }
+  if (isNaN(id)) throw new Error("Invalid user ID (NaN or undefined)");
 
-  // Base fields to update
   const fields = [
     "first_name = $1",
     "middle_name = $2",
@@ -132,49 +136,54 @@ export const UpdateUserById = async (data) => {
     bio || null,
   ];
 
-  // Only update image_url if it’s explicitly provided
   if (image_url !== undefined && image_url !== "") {
     fields.push(`image_url = $${fields.length + 1}`);
     values.push(image_url);
   }
 
-  // Add id for WHERE clause
-  values.push(id);
+  // Add id and salon_id for WHERE clause
+  values.push(id, salon_id);
 
   const query = `
     UPDATE users
     SET ${fields.join(", ")}
-    WHERE id = $${values.length}
+    WHERE id = $${values.length - 1} AND salon_id = $${values.length}
     RETURNING *;
   `;
-
-  console.log("Final SQL:", query);
-  console.log("Values:", values);
 
   const result = await db.query(query, values);
   return result.rows[0];
 };
 
+/**
+ * Delete user by ID and salon
+ */
+export const DeleteUserById = async (id, salon_id) => {
+  const query = `DELETE FROM users WHERE id = $1 AND salon_id = $2 RETURNING *;`;
+  const result = await db.query(query, [id, salon_id]);
+  return result.rows[0];
+};
 
 /**
- * Delete user by ID
+ * Find user by email (for a specific salon)
  */
-export const DeleteUserById = async (id) => {
-  const query = `DELETE FROM users WHERE id = $1 RETURNING *;`;
-  const result = await db.query(query, [id]);
+export const findUserByEmail = async (email, salon_id) => {
+  console.log("🔹 findUserByEmail called:", { email, salon_id });
+  const query = "SELECT * FROM users WHERE email = $1 AND salon_id = $2";
+  const result = await db.query(query, [email, salon_id]);
   return result.rows[0];
 };
 
-export const findUserByEmail = async (email) => {
-  const result = await db.query("SELECT * FROM users WHERE email = $1", [email]);
-  return result.rows[0];
-};
-
-export const findUserById = async (id) => {
-  const result = await db.query(
-    "SELECT id, first_name, last_name, email, role FROM users WHERE id=$1",
-    [id]
-  );
+/**
+ * Find user by ID (limited fields) for a specific salon
+ */
+export const findUserById = async (id, salon_id) => {
+  const query = `
+    SELECT id, first_name, last_name, email, role, salon_id 
+    FROM users 
+    WHERE id = $1 AND salon_id = $2
+  `;
+  const result = await db.query(query, [id, salon_id]);
   return result.rows[0];
 };
 

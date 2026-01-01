@@ -1,12 +1,9 @@
 import db from './database.js';
 
 // ===============================
-// SERVICES (year model similar to weekly/monthly model)
+// SERVICES (yearly report with salon_id enforcement)
 // ===============================
-export const getServicesByYear = async (year) => {
-  const startDate = new Date(year, 0, 1);   // Jan 1
-  const endDate = new Date(year, 11, 31);   // Dec 31
-
+export const getServicesByYear = async (year, salon_id) => {
   const query = `
     SELECT 
       st.id AS transaction_id,
@@ -28,11 +25,10 @@ export const getServicesByYear = async (year) => {
 
     FROM service_transactions st
     JOIN service_definitions sd 
-      ON sd.id = st.service_definition_id
-    JOIN service_sections sec
-      ON sec.id = sd.section_id
+      ON sd.id = st.service_definition_id AND sd.salon_id = $2
+    JOIN service_sections sec 
+      ON sec.id = sd.section_id AND sec.salon_id = $2
 
-    -- lateral join for performers aggregation
     LEFT JOIN LATERAL (
       SELECT json_agg(
                jsonb_build_object(
@@ -44,12 +40,13 @@ export const getServicesByYear = async (year) => {
                )
              ) AS performers
       FROM service_performers sp
-      LEFT JOIN service_roles sr ON sr.id = sp.service_role_id
-      LEFT JOIN users u ON u.id = sp.employee_id
-      WHERE sp.service_transaction_id = st.id
+      LEFT JOIN service_roles sr 
+        ON sr.id = sp.service_role_id AND sr.salon_id = $2
+      LEFT JOIN users u 
+        ON u.id = sp.employee_id AND u.salon_id = $2
+      WHERE sp.service_transaction_id = st.id AND sp.salon_id = $2
     ) perf ON TRUE
 
-    -- lateral join for materials aggregation
     LEFT JOIN LATERAL (
       SELECT json_agg(
                jsonb_build_object(
@@ -58,19 +55,20 @@ export const getServicesByYear = async (year) => {
                )
              ) AS materials
       FROM service_materials sm
-      WHERE sm.service_definition_id = sd.id
+      WHERE sm.service_definition_id = sd.id AND sm.salon_id = $2
     ) mat ON TRUE
 
     WHERE 
-      st.service_timestamp BETWEEN $1 AND $2
+      st.salon_id = $2
+      AND EXTRACT(YEAR FROM (st.service_timestamp AT TIME ZONE 'Africa/Kampala')) = $1
       AND (st.status IS NULL OR LOWER(st.status) = 'completed')
 
     ORDER BY st.service_timestamp DESC;
   `;
 
-  const { rows } = await db.query(query, [startDate, endDate]);
+  const { rows } = await db.query(query, [year, salon_id]);
 
-  // Deduplicate materials in JS
+  // Remove duplicate materials if needed
   const result = rows.map(row => {
     if (Array.isArray(row.materials)) {
       row.materials = Array.from(
@@ -82,28 +80,31 @@ export const getServicesByYear = async (year) => {
     return row;
   });
 
+  console.log("services in the yearly model", result);
   return result;
 };
+
 
 // ===============================
 // EXPENSES
 // ===============================
-export const getExpensesByYear = async (year) => {
-  const startDate = new Date(year, 0, 1);
-  const endDate = new Date(year, 11, 31);
-  const result = await db.query(
-    "SELECT * FROM expenses WHERE created_at BETWEEN $1 AND $2 ORDER BY id DESC",
-    [startDate, endDate]
-  );
-  return result.rows;
+export const getExpensesByYear = async (year, salon_id) => {
+  const query = `
+    SELECT *
+    FROM expenses
+    WHERE
+      salon_id = $2
+      AND EXTRACT(YEAR FROM (created_at AT TIME ZONE 'Africa/Kampala')) = $1
+    ORDER BY id DESC;
+  `;
+  const { rows } = await db.query(query, [year, salon_id]);
+  return rows;
 };
 
 // ===============================
 // SALARY ADVANCES
 // ===============================
-export const getAdvancesByYear = async (year) => {
-  const startDate = new Date(year, 0, 1);
-  const endDate = new Date(year, 11, 31);
+export const getAdvancesByYear = async (year, salon_id) => {
   const query = `
     SELECT 
       a.*,
@@ -111,49 +112,51 @@ export const getAdvancesByYear = async (year) => {
       u.last_name
     FROM advances a
     LEFT JOIN users u ON a.employee_id = u.id
-    WHERE a.created_at BETWEEN $1 AND $2
+    WHERE
+      a.salon_id = $2
+      AND EXTRACT(YEAR FROM (a.created_at AT TIME ZONE 'Africa/Kampala')) = $1
     ORDER BY a.id DESC;
   `;
-  const result = await db.query(query, [startDate, endDate]);
-  return result.rows;
+  const { rows } = await db.query(query, [year, salon_id]);
+  return rows;
 };
 
 // ===============================
 // TAG FEES
 // ===============================
-export const getTagFeesByYear = async (year) => {
-  const startDate = new Date(year, 0, 1);
-  const endDate = new Date(year, 11, 31);
+export const getTagFeesByYear = async (year, salon_id) => {
   const query = `
-    SELECT tf.*,
-    u.first_name,
-    u.last_name
+    SELECT 
+      tf.*,
+      CONCAT(u.first_name, ' ', u.last_name) AS employee_name
     FROM tag_fee tf
     LEFT JOIN users u ON tf.employee_id = u.id
-    WHERE tf.created_at BETWEEN $1 AND $2
+    WHERE
+      tf.salon_id = $2
+      AND EXTRACT(YEAR FROM (tf.created_at AT TIME ZONE 'Africa/Kampala')) = $1
     ORDER BY tf.id DESC;
   `;
-  const result = await db.query(query, [startDate, endDate]);
-  return result.rows;
+  const { rows } = await db.query(query, [year, salon_id]);
+  return rows;
 };
 
 // ===============================
 // LATE FEES
 // ===============================
-export const getLateFeesByYear = async (year) => {
-  const startDate = new Date(year, 0, 1);
-  const endDate = new Date(year, 11, 31);
+export const getLateFeesByYear = async (year, salon_id) => {
   const query = `
-    SELECT lf.*,
-    u.first_name,
-    u.last_name
+    SELECT 
+      lf.*,
+      CONCAT(u.first_name, ' ', u.last_name) AS employee_name
     FROM late_fees lf
     LEFT JOIN users u ON lf.employee_id = u.id
-    WHERE lf.created_at BETWEEN $1 AND $2
+    WHERE
+      lf.salon_id = $2
+      AND EXTRACT(YEAR FROM (lf.created_at AT TIME ZONE 'Africa/Kampala')) = $1
     ORDER BY lf.id DESC;
   `;
-  const result = await db.query(query, [startDate, endDate]);
-  return result.rows;
+  const { rows } = await db.query(query, [year, salon_id]);
+  return rows;
 };
 
 // ===============================

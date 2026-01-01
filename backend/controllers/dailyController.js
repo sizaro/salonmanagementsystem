@@ -1,33 +1,32 @@
-import dailyModel from '../models/dailyModel.js';
+import dotenv from "dotenv";
+dotenv.config();
+
+import dailyModel from "../models/dailyModel.js";
+
+/**
+ * Resolve salon_id safely:
+ * 1. Logged-in user
+ * 2. Request-scoped salon (future-proof)
+ * 3. DEFAULT_SALON_ID from env
+ */
+const resolveSalonId = (req) => {
+  return (
+    req.user?.salon_id ||
+    req.salon_id ||
+    Number(process.env.DEFAULT_SALON_ID)
+  );
+};
 
 export async function getDailyReport(req, res) {
   try {
     const { date } = req.query;
+    if (!date) return res.status(400).json({ error: "Missing date" });
 
-    // If no date provided, return empty arrays
-    if (!date) {
-      return res.json({
-        services: [],
-        expenses: [],
-        advances: [],
-        clockings: [],
-        employees: [],
-        tagFees: [],
-        lateFees: []
-      });
+    const salon_id = resolveSalonId(req);
+    if (!salon_id) {
+      return res.status(400).json({ error: "Salon context missing" });
     }
 
-    // Convert date string to Date object
-    const selectedDate = new Date(date);
-
-    // Define the start and end of the day
-    const startOfDay = new Date(selectedDate);
-    startOfDay.setHours(0, 0, 0, 0);
-
-    const endOfDay = new Date(selectedDate);
-    endOfDay.setHours(23, 59, 59, 999);
-
-    // Fetch all datasets concurrently
     const [
       services,
       expenses,
@@ -37,26 +36,26 @@ export async function getDailyReport(req, res) {
       lateFees,
       employees
     ] = await Promise.all([
-      dailyModel.getServicesByDay(startOfDay.toISOString(), endOfDay.toISOString()),
-      dailyModel.getExpensesByDay(startOfDay.toISOString(), endOfDay.toISOString()),
-      dailyModel.getAdvancesByDay(startOfDay.toISOString(), endOfDay.toISOString()),
-      dailyModel.getClockingsByDay(startOfDay.toISOString(), endOfDay.toISOString()),
-      dailyModel.getTagFeesByDay(startOfDay.toISOString(), endOfDay.toISOString()),
-      dailyModel.getLateFeesByDay(startOfDay.toISOString(), endOfDay.toISOString()),
-      dailyModel.fetchAllEmployees()
+      dailyModel.getServicesByDay(date, salon_id),
+      dailyModel.getExpensesByDay(date, salon_id),
+      dailyModel.getAdvancesByDay(date, salon_id),
+      dailyModel.getClockingsByDay(date, salon_id),
+      dailyModel.getTagFeesByDay(date, salon_id),
+      dailyModel.getLateFeesByDay(date, salon_id),
+      dailyModel.fetchAllEmployees(salon_id)
     ]);
 
     console.log("✅ Daily Report Generated:", {
       date,
-      servicesCount: services,
-      expensesCount: expenses,
-      advancesCount: advances,
-      clockingsCount: clockings,
-      tagFeesCount: tagFees,
-      lateFeesCount: lateFees
+      salon_id,
+      servicesCount: services?.length,
+      expensesCount: expenses?.length,
+      advancesCount: advances?.length,
+      clockingsCount: clockings?.length,
+      tagFeesCount: tagFees?.length,
+      lateFeesCount: lateFees?.length
     });
 
-    // Return all data in one object
     res.json({
       services,
       expenses,

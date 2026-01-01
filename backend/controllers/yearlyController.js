@@ -3,62 +3,40 @@ import yearlyModel from "../models/yearlyModel.js";
 export const getYearlyReport = async (req, res) => {
   try {
     const { year } = req.query;
-    console.log("Received in the controller year:", year);
+    const salon_id = req.user.salon_id; // get salon_id from logged-in user
 
-    const today = new Date();
-    const rangeStart = new Date(year, 0, 1);
-    let rangeEnd = new Date(year, 11, 31);
-
-    let scenario = "";
-
-    // Future year
-    if (rangeStart > today) {
-      scenario = "future";
-      return res.json({
-        scenario,
-        services: [],
-        expenses: [],
-        advances: [],
-        tagFees: [],
-        lateFees: []
-      });
+    if (!year) {
+      return res.status(400).json({ error: "Year is required" });
     }
 
-    // Current year
-    if (rangeStart <= today && rangeEnd >= today) {
-      scenario = "current";
-      const yesterday = new Date(today);
-      yesterday.setDate(today.getDate() - 1);
-      yesterday.setHours(23, 59, 59, 999);
-      rangeEnd = yesterday;
-    }
+    console.log("Received in the controller year:", year, "Salon ID:", salon_id);
 
-    // Past year
-    if (rangeEnd < today) {
-      scenario = "past";
-    }
-
-    // Fetch DB data including tag fees and late fees
-    const [services, expenses, advances, tagFees, lateFees] = await Promise.all([
-      yearlyModel.getServicesByYear(year),
-      yearlyModel.getExpensesByYear(year),
-      yearlyModel.getAdvancesByYear(year),
-      yearlyModel.getTagFeesByYear(year),
-      yearlyModel.getLateFeesByYear(year)
+    const [
+      services,
+      expenses,
+      advances,
+      tagFees,
+      lateFees
+    ] = await Promise.all([
+      yearlyModel.getServicesByYear(year, salon_id),
+      yearlyModel.getExpensesByYear(year, salon_id),
+      yearlyModel.getAdvancesByYear(year, salon_id),
+      yearlyModel.getTagFeesByYear(year, salon_id),
+      yearlyModel.getLateFeesByYear(year, salon_id)
     ]);
 
-    console.log("Yearly services:", services);
-    console.log("Yearly advances:", lateFees);
-    console.log("Yearly tag fees:", tagFees);
-    console.log("Yearly late fees:", lateFees);
+    console.log("Yearly services:", services.length);
+    console.log("Yearly expenses:", expenses.length);
+    console.log("Yearly advances:", advances.length);
+    console.log("Yearly tag fees:", tagFees.length);
+    console.log("Yearly late fees:", lateFees.length);
 
     res.json({
-      scenario,
-      services: services,
-      expenses: expenses,
-      advances: advances,
-      tagFees: tagFees,
-      lateFees: lateFees
+      services,
+      expenses,
+      advances,
+      tagFees,
+      lateFees
     });
 
   } catch (err) {

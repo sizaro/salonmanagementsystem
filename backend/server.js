@@ -87,7 +87,7 @@ const sessionStore = new PgSessionStore({
           port: 5433,
           user: "postgres",
           password: "postgres",
-          database: "salon_dev",
+          database: "salonmanagementsystemv2_db",
           ssl: false,
         },
       }),
