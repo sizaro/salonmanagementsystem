@@ -36,12 +36,15 @@ const pendingCount = pendingAppointments.length;
 
   const navigate = useNavigate();
 
+  const SOCKET_API_URL = import.meta.env.VITE_API_URL || "https://salonmanagementsystem.onrender.com";
   const API_URL = import.meta.env.VITE_API_URL || "/api";
 
-  const socket = io(API_URL.replace("/api", ""), {
+  const socket = io(SOCKET_API_URL.replace("/api", ""), {
+    withCredentials: true,
   transports: ["websocket"],
   secure: true
 });
+
 
   // ---------- Fetch All ----------
   const fetchAllData = async () => {
@@ -62,6 +65,7 @@ const pendingCount = pendingAppointments.length;
   const fetchSessions = async () => {
     try {
       const res = await axios.get(`${API_URL}/sessions`);
+      console.log("sessions in the data context", res.data)
       setSessions(res.data);
     } catch (err) {
       console.error("Error fetching sessions:", err);

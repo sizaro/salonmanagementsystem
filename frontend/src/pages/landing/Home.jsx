@@ -5,6 +5,10 @@ import { useData } from "../../context/DataContext";
 
 export default function Home() {
   const { serviceDefinitions = [], fetchServiceDefinitions } = useData();
+const staticBaseUrl =
+  import.meta.env.MODE === "development"
+    ? "http://localhost:5500"
+    : "https://salonmanagementsystem.onrender.com";
 
   useEffect(() => {
     fetchServiceDefinitions();
@@ -59,7 +63,7 @@ export default function Home() {
             >
               <div className="h-48 bg-gray-200 flex items-center justify-center overflow-hidden">
                 <img
-                  src={`/images/service-${i + 1}.jpg`}
+                  src={`${staticBaseUrl}${service.image_url}`}
                   alt={service.service_name}
                   className="w-full h-full object-cover"
                 />
